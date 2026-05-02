@@ -1,0 +1,48 @@
+{
+  "nav": {
+    "company": "About BắcÂu",
+    "projects": "Reference Projects",
+    "solutions": "Solutions",
+    "products": "Products",
+    "services": "Services",
+    "news": "Blog",
+    "contact": "Contact",
+    "careers": "Careers"
+  },
+  "hero": {
+    "cta": "Learn More",
+    "ctaContact": "Contact Us"
+  },
+  "sections": {
+    "featuredProjects": "Featured Projects",
+    "news": "News & Events",
+    "partners": "Strategic Partners",
+    "products": "Industrial Equipment & Products",
+    "viewAll": "View All",
+    "viewMore": "View More"
+  },
+  "filter": {
+    "all": "All",
+    "electricalAutomation": "Electrical & Automation",
+    "digitalization": "Digitalization",
+    "measurement": "Measurement",
+    "industrialServices": "Industrial Services"
+  },
+  "footer": {
+    "description": "Leading provider of Industrial Automation and Digitalization solutions in Vietnam.",
+    "links": "Links",
+    "contact": "Contact",
+    "services": "Services",
+    "copyright": "© 2024 BắcÂu. All rights reserved."
+  },
+  "project": {
+    "customer": "Customer",
+    "address": "Address",
+    "industry": "Industry",
+    "location": "Location",
+    "year": "Year",
+    "intro": "Project Introduction",
+    "solutions": "Work & Solutions",
+    "results": "Results Achieved"
+  }
+}

@@ -1,0 +1,44 @@
+import type { CollectionConfig } from 'payload'
+
+export const News: CollectionConfig = {
+  slug: 'news',
+  admin: { useAsTitle: 'title' },
+  versions: { drafts: true },
+  fields: [
+    {
+      name: 'title',
+      type: 'group',
+      fields: [
+        { name: 'vi', type: 'text', required: true, label: 'Tiêu đề (VI)' },
+        { name: 'en', type: 'text', label: 'Title (EN)' },
+      ],
+    },
+    { name: 'slug', type: 'text', required: true, unique: true, admin: { position: 'sidebar' } },
+    { name: 'publishedAt', type: 'date', required: true, admin: { position: 'sidebar' } },
+    { name: 'thumbnail', type: 'upload', relationTo: 'media', required: true },
+    {
+      name: 'excerpt',
+      type: 'group',
+      label: 'Mô tả ngắn',
+      fields: [
+        { name: 'vi', type: 'textarea', label: 'VI' },
+        { name: 'en', type: 'textarea', label: 'EN' },
+      ],
+    },
+    {
+      name: 'content',
+      type: 'group',
+      label: 'Nội dung',
+      fields: [
+        { name: 'vi', type: 'richText', label: 'VI' },
+        { name: 'en', type: 'richText', label: 'EN' },
+      ],
+    },
+    {
+      name: 'tags',
+      type: 'select',
+      hasMany: true,
+      options: ['Tin tức', 'Sự kiện', 'Hội thảo', 'Thông cáo'],
+    },
+  ],
+}

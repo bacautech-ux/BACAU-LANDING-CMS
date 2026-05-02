@@ -1,0 +1,48 @@
+{
+  "nav": {
+    "company": "Công ty BắcÂu",
+    "projects": "Dự án Tham khảo",
+    "solutions": "Giải pháp",
+    "products": "Sản phẩm",
+    "services": "Dịch vụ",
+    "news": "Blog",
+    "contact": "Liên hệ",
+    "careers": "Cơ hội nghề nghiệp"
+  },
+  "hero": {
+    "cta": "Tìm hiểu thêm",
+    "ctaContact": "Liên hệ ngay"
+  },
+  "sections": {
+    "featuredProjects": "Dự án Tiêu biểu",
+    "news": "Tin tức & Sự kiện",
+    "partners": "Đối tác Chiến lược",
+    "products": "Thiết bị & Sản phẩm Công nghiệp",
+    "viewAll": "Xem tất cả",
+    "viewMore": "Xem thêm"
+  },
+  "filter": {
+    "all": "Tất cả",
+    "electricalAutomation": "Điện & Tự động hóa",
+    "digitalization": "Số hóa",
+    "measurement": "Đo lường",
+    "industrialServices": "Dịch vụ CN"
+  },
+  "footer": {
+    "description": "Nhà cung cấp giải pháp hàng đầu trong lĩnh vực Tự Động Hóa và Số hóa công nghiệp tại Việt Nam.",
+    "links": "Liên kết",
+    "contact": "Liên hệ",
+    "services": "Dịch vụ",
+    "copyright": "© 2024 BắcÂu. All rights reserved."
+  },
+  "project": {
+    "customer": "Khách hàng",
+    "address": "Địa chỉ",
+    "industry": "Ngành công nghiệp",
+    "location": "Địa điểm",
+    "year": "Năm thực hiện",
+    "intro": "Giới thiệu về dự án",
+    "solutions": "Công việc & Giải pháp",
+    "results": "Kết quả đạt được"
+  }
+}

@@ -3,15 +3,29 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
+    "dev": "NODE_OPTIONS='--max-old-space-size=4096' node node_modules/next/dist/bin/next dev",
+    "generate:importmap": "PAYLOAD_CONFIG_PATH=payload.config.ts node_modules/.bin/tsx node_modules/payload/dist/bin/index.js generate:importMap",
+    "migrate": "PAYLOAD_CONFIG_PATH=payload.config.ts node_modules/.bin/tsx node_modules/payload/dist/bin/index.js migrate",
+    "migrate:create": "PAYLOAD_CONFIG_PATH=payload.config.ts node_modules/.bin/tsx node_modules/payload/dist/bin/index.js migrate:create",
+    "build": "npm run migrate && node node_modules/next/dist/bin/next build",
+    "start": "node node_modules/next/dist/bin/next start",
+    "seed": "PAYLOAD_CONFIG_PATH=payload.config.ts node_modules/.bin/tsx node_modules/payload/dist/bin/index.js run src/seed.ts",
     "lint": "eslint"
   },
   "dependencies": {
+    "@payloadcms/db-postgres": "^3.84.0",
+    "@payloadcms/next": "^3.84.0",
+    "@payloadcms/plugin-cloud-storage": "^3.84.0",
+    "@payloadcms/richtext-lexical": "^3.84.0",
+    "cloudinary": "^2.9.0",
+    "framer-motion": "^12.38.0",
     "next": "16.2.4",
+    "next-intl": "^4.9.1",
+    "payload": "^3.84.0",
     "react": "19.2.4",
-    "react-dom": "19.2.4"
+    "react-dom": "19.2.4",
+    "sass": "^1.99.0",
+    "sharp": "^0.34.5"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
@@ -21,6 +35,6 @@
     "eslint": "^9",
     "eslint-config-next": "16.2.4",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^5.9.3"
   }
 }

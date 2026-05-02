@@ -1,0 +1,16 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: glampinghub_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: glampinghub
+      POSTGRES_PASSWORD: glampinghub_dev_password
+      POSTGRES_DB: bacau_dev
+    ports:
+      - "54320:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:

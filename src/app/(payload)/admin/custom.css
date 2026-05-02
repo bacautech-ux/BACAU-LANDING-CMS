@@ -1,0 +1,91 @@
+/* Establish layer order: payload-default must be last so it wins over Tailwind's @layer base */
+@layer theme, base, components, utilities, payload-default;
+
+/* Bắc Âu Admin Theme — Light */
+
+/* ─── Brand blue as primary action color ─── */
+:root {
+  --color-success-50:  #eff6ff;
+  --color-success-100: #dbeafe;
+  --color-success-150: #bfdbfe;
+  --color-success-200: #93c5fd;
+  --color-success-250: #60a5fa;
+  --color-success-300: #3b82f6;
+  --color-success-350: #2563eb;
+  --color-success-400: #1d4ed8;
+  --color-success-450: #1e40af;
+  --color-success-500: #1e3a8a;
+  --color-success-550: #1e3075;
+  --color-success-600: #1a2a66;
+  --color-success-650: #162256;
+  --color-success-700: #121b47;
+  --color-success-750: #0e1538;
+  --color-success-800: #0a1029;
+  --color-success-850: #070b1c;
+  --color-success-900: #04070f;
+  --color-success-950: #020408;
+}
+
+/* ─── Login / Create-first-user form: center card ─── */
+section.template-minimal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background-color: #F2F3F0;
+  padding: 2rem 1rem;
+  box-sizing: border-box;
+}
+
+section.template-minimal .template-minimal__wrap {
+  width: 100%;
+  max-width: 480px;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 24px rgba(15, 23, 42, 0.08), 0 1px 4px rgba(15, 23, 42, 0.06);
+  padding: 2.5rem 2.5rem 2rem;
+  box-sizing: border-box;
+}
+
+/* ─── Typography (login/create pages only) ─── */
+.create-first-user h1,
+.login-form h1 {
+  color: #0F172A;
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin-bottom: 0.4rem;
+}
+
+.create-first-user > p,
+.login-form > p {
+  color: #475569;
+  font-size: 0.9375rem;
+  margin-top: 0;
+  margin-bottom: 1.75rem;
+}
+
+/* ─── Dropdown above everything, with solid background ─── */
+.rs__menu {
+  z-index: 9999 !important;
+  background-color: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.12) !important;
+  border-radius: 8px !important;
+}
+
+/* ─── Primary button — brand blue ─── */
+.btn--style-primary {
+  background-color: #2563EB !important;
+  border-color: #2563EB !important;
+  color: #ffffff !important;
+}
+
+.btn--style-primary:hover {
+  background-color: #1D4ED8 !important;
+  border-color: #1D4ED8 !important;
+}
+
+.btn--style-primary:active {
+  background-color: #1E40AF !important;
+  border-color: #1E40AF !important;
+}
