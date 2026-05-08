@@ -9,12 +9,9 @@ interface PageWithSidebarProps {
 
 export function PageWithSidebar({ sidebar, children }: PageWithSidebarProps) {
   return (
-    <div
-      className="flex gap-8 items-start w-full"
-      style={{ padding: '40px 60px' }}
-    >
+    <div className="flex w-full flex-col gap-6 px-4 py-5 md:px-6 md:py-6 lg:flex-row lg:items-start lg:gap-8 xl:px-[60px] xl:py-10">
       {/* Sidebar — sticky so it stays while content scrolls */}
-      <div className="shrink-0 sticky top-[72px]">{sidebar}</div>
+      {sidebar && <div className="shrink-0 lg:sticky lg:top-[72px]">{sidebar}</div>}
 
       {/* Content area */}
       <div className="flex-1 min-w-0">{children}</div>

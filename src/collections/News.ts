@@ -2,9 +2,28 @@ import type { CollectionConfig } from 'payload'
 
 export const News: CollectionConfig = {
   slug: 'news',
-  admin: { useAsTitle: 'title' },
+  admin: { useAsTitle: 'titleLabel' },
   versions: { drafts: true },
+  hooks: {
+    beforeValidate: [
+      ({ data }) => {
+        if (!data) return data
+
+        return {
+          ...data,
+          titleLabel: data.title?.vi ?? data.titleLabel ?? data.slug,
+        }
+      },
+    ],
+  },
   fields: [
+    {
+      name: 'titleLabel',
+      type: 'text',
+      admin: {
+        hidden: true,
+      },
+    },
     {
       name: 'title',
       type: 'group',

@@ -9,6 +9,11 @@ interface CTABannerProps {
   primaryCTAHref?: string
   secondaryCTALabel?: string
   secondaryCTAHref?: string
+  backgroundColor?: string
+  gradientFrom?: string
+  gradientMiddle?: string
+  gradientTo?: string
+  accentColor?: string
 }
 
 export function CTABanner({
@@ -19,31 +24,34 @@ export function CTABanner({
   primaryCTAHref = '/lien-he',
   secondaryCTALabel = 'Xem Dịch vụ',
   secondaryCTAHref = '/dich-vu',
+  backgroundColor = '#0F172A',
+  gradientFrom = '#B92C32',
+  gradientMiddle = '#2b358c',
+  gradientTo = '#0F172A',
+  accentColor = '#B92C32',
 }: CTABannerProps) {
   return (
     <section
-      className="flex flex-col items-center justify-center gap-6 text-center"
+      className="flex min-h-[360px] flex-col items-center justify-center gap-5 px-4 py-10 text-center md:min-h-[360px] md:px-24 xl:px-[200px] xl:py-20"
       style={{
-        height: 360,
-        padding: '80px 200px',
-        background: `linear-gradient(135deg, rgba(185,44,50,0.3) 0%, rgba(43,53,140,0.3) 50%, rgba(15,23,42,0.3) 100%), #0F172A`,
+        background: `linear-gradient(135deg, ${gradientFrom}4D 0%, ${gradientMiddle}4D 50%, ${gradientTo}4D 100%), ${backgroundColor}`,
       }}
     >
-      <div className="w-[60px] h-1 rounded-sm bg-primary-red" />
-      <h2 className="text-[36px] font-extrabold text-white w-full">{title}</h2>
-      <p className="text-[16px] max-w-[600px]" style={{ color: '#CBD5E1' }}>{subtitle}</p>
-      <div className="flex items-center gap-4">
+      <div className="h-1 w-[60px] rounded-sm" style={{ background: accentColor }} />
+      <h2 className="w-full text-[28px] font-extrabold leading-[1.2] text-white md:text-[32px] xl:text-[36px]">{title}</h2>
+      <p className="max-w-[600px] text-[14px] leading-[1.6] md:text-[16px]" style={{ color: '#CBD5E1' }}>{subtitle}</p>
+      <div className="flex w-full flex-col items-stretch gap-3 sm:w-auto sm:flex-row sm:items-center md:gap-4">
         <Link
           href={`/${locale}${primaryCTAHref}`}
-          className="flex items-center gap-2.5 rounded-md text-white font-bold"
-          style={{ fontSize: 15, padding: '16px 40px', background: '#B92C32', boxShadow: '0 4px 24px #B92C3255' }}
+          className="flex items-center justify-center gap-2.5 rounded-md px-8 py-4 text-[15px] font-bold text-white"
+          style={{ background: '#B92C32', boxShadow: '0 4px 24px #B92C3255' }}
         >
           {primaryCTALabel} <span>→</span>
         </Link>
         <Link
           href={`/${locale}${secondaryCTAHref}`}
-          className="flex items-center rounded-md text-white font-semibold border"
-          style={{ fontSize: 15, padding: '16px 40px', background: '#FFFFFF10', borderColor: '#FFFFFF30' }}
+          className="flex items-center justify-center rounded-md border px-8 py-4 text-[15px] font-semibold text-white"
+          style={{ background: '#FFFFFF10', borderColor: '#FFFFFF30' }}
         >
           {secondaryCTALabel}
         </Link>

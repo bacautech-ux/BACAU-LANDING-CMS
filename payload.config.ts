@@ -1,11 +1,14 @@
 import { buildConfig } from 'payload'
 import { vi } from '@payloadcms/translations/languages/vi'
 import { HomePage } from './src/globals/HomePage'
+import { SiteSettings } from './src/globals/SiteSettings'
 import { postgresAdapter } from '@payloadcms/db-postgres'
+import { cloudStoragePlugin } from '@payloadcms/plugin-cloud-storage'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import path from 'path'
 import { fileURLToPath } from 'url'
 import sharp from 'sharp'
+import { cloudinaryAdapter } from './src/lib/cloudinaryAdapter'
 
 import { Users } from './src/collections/Users'
 import { Media } from './src/collections/Media'
@@ -25,13 +28,32 @@ export default buildConfig({
     importMap: {
       baseDir: path.resolve(dirname),
     },
+    components: {
+      afterNavLinks: ['/src/components/admin/BlockLibraryNavLink.tsx#BlockLibraryNavLink'],
+      views: {
+        blockLibrary: {
+          Component: '/src/components/admin/BlockLibraryShell.tsx#BlockLibraryShell',
+          path: '/block-library',
+        },
+      },
+    },
     theme: 'light',
     meta: {
       titleSuffix: '- Bắc Âu Admin',
     },
   },
   collections: [Users, Media, Pages, Projects, News, Products, Partners, Services],
-  globals: [HomePage],
+  globals: [HomePage, SiteSettings],
+  plugins: [
+    cloudStoragePlugin({
+      collections: {
+        media: {
+          adapter: cloudinaryAdapter(),
+          disableLocalStorage: true,
+        },
+      },
+    }),
+  ],
   editor: lexicalEditor(),
   // UI admin bằng tiếng Việt
   i18n: {
@@ -60,5 +82,4 @@ export default buildConfig({
     push: process.env.NODE_ENV === 'development',
   }),
   sharp,
-  // Cloudinary upload: cấu hình trong Media collection sau khi kết nối Cloudinary
 })

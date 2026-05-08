@@ -26,15 +26,47 @@ interface StatDef {
   suffix: string
   labelTop: string
   labelBottom: string
-  redNumber?: boolean
+  numberColor?: string
 }
+
+const defaultStats: StatDef[] = [
+  {
+    value: 15,
+    suffix: '+',
+    labelTop: 'NĂM',
+    labelBottom: 'Kinh Nghiệm',
+    numberColor: '#B92C32',
+  },
+  {
+    value: 500,
+    suffix: '+',
+    labelTop: 'DỰ ÁN',
+    labelBottom: 'Hoàn Thành',
+    numberColor: '#FFFFFF',
+  },
+  {
+    value: 200,
+    suffix: '+',
+    labelTop: 'KHÁCH HÀNG',
+    labelBottom: 'Tin Tưởng',
+    numberColor: '#FFFFFF',
+  },
+  {
+    value: 50,
+    suffix: '+',
+    labelTop: 'ĐỐI TÁC',
+    labelBottom: 'Chiến Lược',
+    numberColor: '#FFFFFF',
+  },
+]
 
 function StatItem({ stat, started }: { stat: StatDef; started: boolean }) {
   const count = useCountUp(stat.value, 1800, started)
   return (
-    <div className="flex items-center gap-4">
+    <div className="flex items-center gap-3 xl:gap-4">
       <span
-        className={`text-5xl font-black leading-none ${stat.redNumber ? 'text-primary-red' : 'text-white'}`}
+        className="text-4xl xl:text-5xl font-black leading-none"
+        style={{ color: stat.numberColor ?? '#FFFFFF' }}
       >
         {count}{stat.suffix}
       </span>
@@ -55,23 +87,33 @@ interface TrustPartner {
 }
 
 interface HeroSectionProps {
+  badgeText?: string
   title: string
   subtitle: string
   primaryCTA: { label: string; href: string }
   secondaryCTA: { label: string; href: string }
   backgroundImage?: string
   backgroundVideo?: string
+  stats?: {
+    value?: number | null
+    suffix?: string | null
+    labelTop?: string | null
+    labelBottom?: string | null
+    numberColor?: string | null
+  }[]
   trustPartners?: TrustPartner[]
 }
 
 /* ── Main component ─────────────────────────────────────── */
 export function HeroSection({
+  badgeText,
   title,
   subtitle,
   primaryCTA,
   secondaryCTA,
   backgroundImage,
   backgroundVideo,
+  stats,
   trustPartners,
 }: HeroSectionProps) {
   // Ẩn hàng đối tác nếu admin không setup
@@ -88,18 +130,23 @@ export function HeroSection({
     return () => observer.disconnect()
   }, [])
 
-  const stats: StatDef[] = [
-    { value: 15, suffix: '+', labelTop: 'NĂM', labelBottom: 'Kinh Nghiệm', redNumber: true },
-    { value: 500, suffix: '+', labelTop: 'DỰ ÁN', labelBottom: 'Hoàn Thành' },
-    { value: 200, suffix: '+', labelTop: 'KHÁCH HÀNG', labelBottom: 'Tin Tưởng' },
-    { value: 50, suffix: '+', labelTop: 'ĐỐI TÁC', labelBottom: 'Chiến Lược' },
-  ]
+  const statsSource = stats ?? defaultStats
+  const visibleStats: StatDef[] = statsSource
+    .filter((stat) => typeof stat.value === 'number')
+    .map((stat, index) => ({
+      value: stat.value ?? 0,
+      suffix: stat.suffix ?? '',
+      labelTop: stat.labelTop ?? '',
+      labelBottom: stat.labelBottom ?? '',
+      numberColor: stat.numberColor || (index === 0 ? '#B92C32' : '#FFFFFF'),
+    }))
+  const heroBadgeText = badgeText?.trim() || 'CÔNG TY CỔ PHẦN KỸ THUẬT BẮC ÂU'
 
 
   return (
     <section>
       {/* ── Hero fullbleed ── */}
-      <div className="relative flex items-center justify-center overflow-hidden" style={{ height: 700 }}>
+      <div className="relative flex h-[220px] items-center justify-center overflow-hidden md:h-[300px] lg:h-[700px]">
         {/* Background — video hoặc image */}
         <div className="absolute inset-0 z-0">
           {backgroundVideo ? (
@@ -131,7 +178,7 @@ export function HeroSection({
         </div>
 
         {/* Content */}
-        <div className="relative z-10 flex flex-col items-center gap-8 px-6 text-center w-full max-w-5xl mx-auto py-24">
+        <div className="relative z-10 hidden w-full max-w-5xl flex-col items-center gap-8 px-6 py-24 text-center lg:flex">
           {/* Badge pill */}
           <div
             className="flex items-center gap-2 px-5 py-2.5 rounded-full border"
@@ -142,7 +189,7 @@ export function HeroSection({
               className="text-[11px] font-bold tracking-[3px] uppercase"
               style={{ color: '#FFFFFFBB' }}
             >
-              CÔNG TY CỔ PHẦN KỸ THUẬT BẮC ÂU
+              {heroBadgeText}
             </span>
           </div>
 
@@ -236,21 +283,22 @@ export function HeroSection({
         style={{ background: 'linear-gradient(90deg, #B92C32 0%, #2b358c 100%)' }}
       />
 
-      {/* ── Stats bar ── */}
-      <div
-        ref={statsRef}
-        className="w-full flex items-center justify-between px-[120px] py-9 flex-wrap gap-8"
-        style={{ background: '#080C15' }}
-      >
-        {stats.map((stat, i) => (
-          <React.Fragment key={i}>
-            <StatItem stat={stat} started={statsStarted} />
-            {i < stats.length - 1 && (
-              <div className="w-px h-[50px]" style={{ background: '#FFFFFF12' }} />
-            )}
-          </React.Fragment>
-        ))}
-      </div>
+      {visibleStats.length > 0 && (
+        <div
+          ref={statsRef}
+          className="hidden w-full items-center justify-between gap-8 px-8 py-8 lg:flex xl:px-[120px] xl:py-9"
+          style={{ background: '#080C15' }}
+        >
+          {visibleStats.map((stat, i) => (
+            <React.Fragment key={i}>
+              <StatItem stat={stat} started={statsStarted} />
+              {i < visibleStats.length - 1 && (
+                <div className="w-px h-[50px]" style={{ background: '#FFFFFF12' }} />
+              )}
+            </React.Fragment>
+          ))}
+        </div>
+      )}
     </section>
   )
 }

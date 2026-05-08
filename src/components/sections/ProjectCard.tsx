@@ -7,6 +7,7 @@ export interface ProjectCardData {
   title: string
   summary: string
   category: string
+  industry?: string | null
   categoryLabel: string
   thumbnail: string
   thumbnailAlt: string
@@ -22,17 +23,14 @@ interface ProjectCardProps {
 // Specs: image 200px + title 13px bold + desc 12px + tag blue 11px, border 1px, padding 16
 function ListCard({ project, href }: { project: ProjectCardData; href: string }) {
   return (
-    <Link
-      href={href}
-      className="group flex flex-col bg-white border border-border hover:shadow-md transition-shadow duration-200"
-    >
-      <div className="relative overflow-hidden shrink-0" style={{ height: 200 }}>
+    <Link href={href} className="group flex flex-col border border-border bg-white transition-shadow duration-200 hover:shadow-md">
+      <div className="relative h-[180px] shrink-0 overflow-hidden md:h-[200px]">
         <Image
           src={project.thumbnail}
           alt={project.thumbnailAlt}
           fill
           className="object-cover group-hover:scale-105 transition-transform duration-500"
-          sizes="25vw"
+          sizes="(max-width: 767px) 100vw, (max-width: 1279px) 50vw, 25vw"
         />
       </div>
       <div className="flex flex-col gap-2 p-4">

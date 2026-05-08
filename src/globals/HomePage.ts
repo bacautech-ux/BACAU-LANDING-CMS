@@ -18,7 +18,8 @@ export const HomePage: GlobalConfig = {
   },
   admin: {
     group: 'Cấu hình Website',
-    description: 'Sắp xếp các section hiển thị trên trang chủ',
+    hidden: true,
+    description: 'Deprecated: chỉ giữ tạm để migrate dữ liệu sang Pages > home',
   },
   fields: [
     {

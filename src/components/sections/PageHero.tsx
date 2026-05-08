@@ -16,8 +16,7 @@ interface PageHeroProps {
 export function PageHero({ title, backgroundImage, breadcrumbs }: PageHeroProps) {
   return (
     <section
-      className="relative flex flex-col justify-end overflow-hidden"
-      style={{ height: 220, padding: '0 60px 30px 60px' }}
+      className="relative flex h-[180px] flex-col justify-end overflow-hidden px-4 pb-5 md:h-[200px] md:px-6 md:pb-6 xl:h-[220px] xl:px-[60px] xl:pb-[30px]"
     >
       {backgroundImage && (
         <div className="absolute inset-0 z-0">
@@ -27,7 +26,7 @@ export function PageHero({ title, backgroundImage, breadcrumbs }: PageHeroProps)
       )}
       <div className="relative z-10 flex flex-col gap-2">
         {breadcrumbs && (
-          <p style={{ color: '#FFFFFF99', fontSize: 14 }}>
+          <p className="text-[12px] md:text-[14px]" style={{ color: '#FFFFFF99' }}>
             {breadcrumbs.map((b, i) => (
               <React.Fragment key={i}>
                 {b.href ? (
@@ -43,10 +42,7 @@ export function PageHero({ title, backgroundImage, breadcrumbs }: PageHeroProps)
         <div className="flex items-center gap-4">
           {/* Red accent bar — 4px wide, 28px tall */}
           <span className="inline-block shrink-0 bg-primary-red" style={{ width: 4, height: 28 }} />
-          <h1
-            className="text-white font-bold uppercase"
-            style={{ fontSize: 28, letterSpacing: 1 }}
-          >
+          <h1 className="text-[24px] font-bold uppercase tracking-[1px] text-white md:text-[28px]">
             {title}
           </h1>
         </div>

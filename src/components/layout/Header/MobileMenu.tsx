@@ -12,10 +12,9 @@ interface NavItem {
 
 interface MobileMenuProps {
   items: NavItem[]
-  locale: string
 }
 
-export function MobileMenu({ items, locale }: MobileMenuProps) {
+export function MobileMenu({ items }: MobileMenuProps) {
   const [isOpen, setIsOpen] = useState(false)
   const [expandedItem, setExpandedItem] = useState<string | null>(null)
   const pathname = usePathname()
@@ -24,13 +23,13 @@ export function MobileMenu({ items, locale }: MobileMenuProps) {
     <>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="p-2 text-white focus:outline-none"
+        className="p-1.5 text-primary-navy focus:outline-none"
         aria-label="Toggle menu"
       >
         <div className="w-6 flex flex-col gap-1.5">
-          <span className={`block h-0.5 bg-white transition-transform ${isOpen ? 'rotate-45 translate-y-2' : ''}`} />
-          <span className={`block h-0.5 bg-white transition-opacity ${isOpen ? 'opacity-0' : ''}`} />
-          <span className={`block h-0.5 bg-white transition-transform ${isOpen ? '-rotate-45 -translate-y-2' : ''}`} />
+          <span className={`block h-0.5 bg-primary-navy transition-transform ${isOpen ? 'rotate-45 translate-y-2' : ''}`} />
+          <span className={`block h-0.5 bg-primary-navy transition-opacity ${isOpen ? 'opacity-0' : ''}`} />
+          <span className={`block h-0.5 bg-primary-navy transition-transform ${isOpen ? '-rotate-45 -translate-y-2' : ''}`} />
         </div>
       </button>
 

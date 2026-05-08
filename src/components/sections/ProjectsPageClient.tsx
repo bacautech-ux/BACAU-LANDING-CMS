@@ -18,7 +18,8 @@ export function ProjectsPageClient({ locale, projects, parents, subs }: Projects
 
   const filtered = projects.filter((p) => {
     const matchParent = p.category === activeParent
-    return matchParent
+    const matchSub = activeSub === 'all' || p.industry === activeSub
+    return matchParent && matchSub
   })
 
   return (
@@ -32,9 +33,9 @@ export function ProjectsPageClient({ locale, projects, parents, subs }: Projects
         onSubChange={setActiveSub}
       />
 
-      <div style={{ padding: '40px 60px' }}>
+      <div className="px-4 py-6 md:px-6 md:py-6 xl:px-[60px] xl:py-10">
         {filtered.length > 0 ? (
-          <div className="grid grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-4">
             {filtered.map((project) => (
               <ProjectCard
                 key={project.slug}

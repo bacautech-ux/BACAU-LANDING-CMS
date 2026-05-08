@@ -1,6 +1,9 @@
 import React from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
+import config from '@payload-config'
 import { getTranslations } from 'next-intl/server'
+import { getPayload } from 'payload'
 import { LanguageToggle } from './LanguageToggle'
 import { MobileMenu } from './MobileMenu'
 
@@ -8,48 +11,130 @@ interface HeaderProps {
   locale: string
 }
 
+interface NavItem {
+  label: string
+  href: string
+  children?: NavItem[] | null
+}
+
+interface SiteSettingsHeader {
+  logoImage?:
+    | {
+        url?: string | null
+        alt?: string | null
+        filename?: string | null
+      }
+    | number
+    | null
+  logoAlt?: string | null
+  logoText?: string | null
+  phone?: string | null
+  email?: string | null
+  navItems?: NavItem[] | null
+}
+
+function withLocalePath(href: string, locale: string) {
+  if (!href) return `/${locale}`
+  if (/^(https?:|mailto:|tel:)/.test(href)) return href
+  if (href === '/') return `/${locale}`
+  if (href.startsWith(`/${locale}/`) || href === `/${locale}`) return href
+  return `/${locale}${href.startsWith('/') ? href : `/${href}`}`
+}
+
+function normalizeNavItems(items: NavItem[] | null | undefined, locale: string) {
+  return (items ?? []).map((item) => ({
+    ...item,
+    href: withLocalePath(item.href, locale),
+    children: item.children?.length
+      ? item.children.map((child) => ({
+          ...child,
+          href: withLocalePath(child.href, locale),
+        }))
+      : undefined,
+  }))
+}
+
+async function getHeaderSettings(locale: string): Promise<SiteSettingsHeader | null> {
+  try {
+    const payload = await getPayload({ config })
+    const settings = await payload.findGlobal({
+      slug: 'site-settings',
+      locale: locale === 'en' ? 'en' : 'vi',
+      depth: 1,
+    })
+
+    return settings.header ?? null
+  } catch {
+    return null
+  }
+}
+
+function getLogoImageData(header: SiteSettingsHeader | null) {
+  if (!header || !header.logoImage || typeof header.logoImage !== 'object') {
+    return null
+  }
+
+  if (!header.logoImage.url) {
+    return null
+  }
+
+  return {
+    src: header.logoImage.url,
+    alt: header.logoAlt ?? header.logoImage.alt ?? header.logoText ?? 'Logo',
+  }
+}
+
 export async function Header({ locale }: HeaderProps) {
   const t = await getTranslations('nav')
+  const header = await getHeaderSettings(locale)
 
-  const navItems = [
+  const fallbackNavItems = [
     {
       label: t('company'),
-      href: `/${locale}/gioi-thieu`,
+      href: '/gioi-thieu',
       children: [
-        { label: 'Giới thiệu', href: `/${locale}/gioi-thieu` },
-        { label: 'Sứ mệnh & Tầm nhìn', href: `/${locale}/gioi-thieu/su-menh` },
-        { label: 'Sơ đồ tổ chức', href: `/${locale}/gioi-thieu/to-chuc` },
-        { label: 'Chứng chỉ & Chất lượng', href: `/${locale}/gioi-thieu/chung-chi` },
-        { label: 'Liên hệ', href: `/${locale}/lien-he` },
+        { label: 'Giới thiệu', href: '/gioi-thieu' },
+        { label: 'Sứ mệnh & Tầm nhìn', href: '/gioi-thieu/su-menh' },
+        { label: 'Sơ đồ tổ chức', href: '/gioi-thieu/to-chuc' },
+        { label: 'Chứng chỉ & Chất lượng', href: '/gioi-thieu/chung-chi' },
+        { label: 'Liên hệ', href: '/lien-he' },
       ],
     },
-    { label: t('projects'), href: `/${locale}/du-an-tham-khao` },
+    { label: t('projects'), href: '/du-an-tham-khao' },
     {
       label: t('solutions'),
-      href: `/${locale}/giai-phap`,
+      href: '/giai-phap',
       children: [
-        { label: 'Giải pháp Điện & Tự động hóa', href: `/${locale}/giai-phap/dien-tu-dong-hoa` },
-        { label: 'Giải pháp Số hóa', href: `/${locale}/giai-phap/so-hoa` },
-        { label: 'Giải pháp Đo lường', href: `/${locale}/giai-phap/do-luong` },
-        { label: 'Dịch vụ Công nghiệp', href: `/${locale}/giai-phap/dich-vu` },
+        { label: 'Giải pháp Điện & Tự động hóa', href: '/giai-phap/dien-tu-dong-hoa' },
+        { label: 'Giải pháp Số hóa', href: '/giai-phap/so-hoa' },
+        { label: 'Giải pháp Đo lường', href: '/giai-phap/do-luong' },
+        { label: 'Dịch vụ Công nghiệp', href: '/giai-phap/dich-vu' },
       ],
     },
-    { label: t('products'), href: `/${locale}/san-pham` },
-    { label: t('news'), href: `/${locale}/tin-tuc` },
-    { label: t('careers'), href: `/${locale}/tuyen-dung` },
+    { label: t('products'), href: '/san-pham' },
+    { label: t('news'), href: '/tin-tuc' },
+    { label: t('careers'), href: '/tuyen-dung' },
   ]
+  const navItems = normalizeNavItems(
+    header?.navItems?.length ? header.navItems : fallbackNavItems,
+    locale,
+  )
+  const phone = header?.phone ?? '(028) 3636 9936'
+  const email = header?.email ?? 'info@bacau.com.vn'
+  const logoText = header?.logoText ?? 'BắcÂu'
+  const logoImage = getLogoImageData(header)
 
   return (
     <header className="sticky top-0 z-50 shadow-sm">
       {/* Top info bar — navy bg */}
-      <div className="bg-primary-navy">
-        <div className="flex items-center justify-between py-[6px] px-[60px]">
-          <div className="flex items-center gap-5">
+      <div className="hidden bg-primary-navy md:block">
+        <div className="flex items-center justify-between px-6 py-[6px] xl:px-[60px]">
+          <div className="flex items-center gap-4 xl:gap-5">
             <a href="tel:02836369936" className="text-xs text-[#94A3B8] hover:text-white transition-colors">
-              📞 (028) 3636 9936
+              📞 {phone}
             </a>
-            <a href="mailto:info@bacau.com.vn" className="text-xs text-[#94A3B8] hover:text-white transition-colors">
-              ✉ info@bacau.com.vn
+            <a href={`mailto:${email}`} className="text-xs text-[#94A3B8] hover:text-white transition-colors">
+              ✉ {email}
             </a>
           </div>
           <LanguageToggle currentLocale={locale} />
@@ -58,9 +143,20 @@ export async function Header({ locale }: HeaderProps) {
 
       {/* Main nav — white bg */}
       <div className="bg-white border-b border-border">
-        <div className="flex items-center justify-between h-14 px-[60px] relative">
+        <div className="relative flex h-9 items-center justify-between px-3 md:h-[39px] md:px-6 lg:h-14 xl:px-[60px]">
           <Link href={`/${locale}`} className="flex items-center shrink-0">
-            <span className="text-lg font-bold text-primary-blue tracking-tight">BắcÂu</span>
+            {logoImage ? (
+              <Image
+                src={logoImage.src}
+                alt={logoImage.alt}
+                width={180}
+                height={52}
+                className="h-7 w-auto object-contain md:h-8 lg:h-10"
+                priority
+              />
+            ) : (
+              <span className="text-base font-bold tracking-tight text-primary-blue lg:text-lg">{logoText}</span>
+            )}
           </Link>
 
           {/* Desktop nav */}
@@ -69,7 +165,7 @@ export async function Header({ locale }: HeaderProps) {
               <div key={item.href} className="relative group">
                 <Link
                   href={item.href}
-                  className="flex items-center gap-1 px-3 py-2 text-[15px] font-bold text-text-primary hover:text-primary-blue transition-colors whitespace-nowrap"
+                  className="flex items-center gap-1 px-2 py-2 text-[13px] font-bold text-text-primary transition-colors hover:text-primary-blue xl:px-3 xl:text-[15px]"
                 >
                   {item.label}
                   {item.children && <span className="text-text-muted text-xs">▾</span>}
@@ -93,7 +189,7 @@ export async function Header({ locale }: HeaderProps) {
 
           {/* Mobile menu */}
           <div className="lg:hidden">
-            <MobileMenu items={navItems} locale={locale} />
+            <MobileMenu items={navItems} />
           </div>
         </div>
       </div>

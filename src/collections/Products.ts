@@ -2,9 +2,26 @@ import type { CollectionConfig } from 'payload'
 
 export const Products: CollectionConfig = {
   slug: 'products',
-  admin: { useAsTitle: 'name' },
+  admin: { useAsTitle: 'nameLabel' },
   versions: { drafts: true },
+  hooks: {
+    beforeValidate: [
+      ({ data }) => {
+        if (!data) return data
+
+        return {
+          ...data,
+          nameLabel: data.name?.vi ?? data.nameLabel ?? data.slug,
+        }
+      },
+    ],
+  },
   fields: [
+    {
+      name: 'nameLabel',
+      type: 'text',
+      admin: { hidden: true },
+    },
     {
       name: 'name',
       type: 'group',
@@ -26,6 +43,15 @@ export const Products: CollectionConfig = {
         { label: 'Động cơ Điện', value: 'motor' },
         { label: 'Cảm biến', value: 'sensor' },
       ],
+    },
+    {
+      name: 'displayCategory',
+      type: 'text',
+      localized: true,
+      label: 'Category label hiển thị trên card',
+      admin: {
+        description: 'VD: Valve & Actuator, Motor & Drive, Sensor & Instrument.',
+      },
     },
     { name: 'thumbnail', type: 'upload', relationTo: 'media', required: true },
     {

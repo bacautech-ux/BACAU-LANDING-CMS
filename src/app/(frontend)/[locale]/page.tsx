@@ -1,6 +1,7 @@
 import React from 'react'
 import config from '@payload-config'
 import { getPayload } from 'payload'
+import { RenderBlocks } from '@/components/blocks/RenderBlocks'
 import { HeroSection } from '@/components/sections/HeroSection'
 import { ServicesSection } from '@/components/sections/ServicesSection'
 import { NewsSection } from '@/components/sections/NewsSection'
@@ -11,11 +12,6 @@ import { CTABanner } from '@/components/sections/CTABanner'
 import { BrandLogos } from '@/components/sections/BrandLogos'
 
 type Locale = 'vi' | 'en'
-
-interface MediaValue {
-  url?: string | null
-  filename?: string | null
-}
 
 // Đệ quy convert \n literal → newline thật trong mọi string từ CMS
 function processNewlines(value: unknown): unknown {
@@ -28,88 +24,24 @@ function processNewlines(value: unknown): unknown {
   return value
 }
 
-function getMediaURL(value: unknown): string | undefined {
-  if (!value || typeof value !== 'object') return undefined
-
-  const media = value as MediaValue
-  if (media.url) return media.url
-  if (media.filename) return `/api/media/file/${media.filename}`
-
-  return undefined
-}
-
-// Fetch layout từ Payload Global bằng Local API để tránh self-fetch qua localhost
+// Fetch layout từ Pages collection bằng Local API để tránh self-fetch qua localhost
 async function getHomePageLayout(locale: Locale) {
   try {
     const payload = await getPayload({ config })
-    const data = await payload.findGlobal({
-      slug: 'home-page',
+    const data = await payload.find({
+      collection: 'pages',
+      where: {
+        slug: { equals: 'home' },
+      },
       depth: 2,
       locale,
       fallbackLocale: 'vi',
+      limit: 1,
     })
-    const layout = data?.layout ?? null
+    const layout = data.docs[0]?.layout ?? null
     return layout ? processNewlines(layout) : null
   } catch {
     return null
-  }
-}
-
-// Map blockType → React component
-function renderBlock(block: Record<string, unknown>, locale: string, index: number) {
-  const type = block.blockType as string
-
-  switch (type) {
-    case 'hero': {
-      const backgroundType = block.backgroundType === 'video' ? 'video' : 'image'
-      const bgImg = getMediaURL(block.backgroundImage)
-      const bgVid = getMediaURL(block.backgroundVideo)
-      return (
-        <HeroSection
-          key={index}
-          title={(block.title as string) ?? 'Giải pháp Tự động hóa\nCông nghiệp Toàn diện'}
-          subtitle={(block.subtitle as string) ?? ''}
-          primaryCTA={{
-            label: (block.primaryCTA as { label: string })?.label ?? 'Khám phá Dịch vụ',
-            href: `/${locale}${(block.primaryCTA as { href: string })?.href ?? '/dich-vu'}`,
-          }}
-          secondaryCTA={{
-            label: (block.secondaryCTA as { label: string })?.label ?? 'Liên hệ Tư vấn',
-            href: `/${locale}${(block.secondaryCTA as { href: string })?.href ?? '/lien-he'}`,
-          }}
-          backgroundImage={backgroundType === 'image' ? (bgImg ?? 'https://images.unsplash.com/photo-1565793298595-6a879b1d9492?w=1600') : undefined}
-          backgroundVideo={backgroundType === 'video' ? bgVid : undefined}
-          trustPartners={block.trustPartners as { name: string; logo?: { url: string; alt?: string } | null }[] | undefined}
-        />
-      )
-    }
-    case 'services':
-      return <ServicesSection key={index} locale={locale} />
-    case 'news':
-      return <NewsSection key={index} locale={locale} />
-    case 'featuredProjects':
-      return <FeaturedProjects key={index} locale={locale} />
-    case 'partners':
-      return <PartnersMosaic key={index} />
-    case 'products':
-      return <ProductsSection key={index} locale={locale} />
-    case 'ctaBanner':
-      return (
-        <CTABanner
-          key={index}
-          locale={locale}
-          title={block.title as string}
-          subtitle={block.subtitle as string}
-          primaryCTALabel={(block.primaryCTA as { label: string })?.label}
-          primaryCTAHref={(block.primaryCTA as { href: string })?.href}
-          secondaryCTALabel={(block.secondaryCTA as { label: string })?.label}
-          secondaryCTAHref={(block.secondaryCTA as { href: string })?.href}
-        />
-      )
-    case 'brandLogos':
-      return <BrandLogos key={index} />
-    default:
-      return null
   }
 }
 
@@ -144,12 +76,6 @@ export default async function Page({ params }: { params: Promise<{ locale: strin
     return <DefaultLayout locale={locale} />
   }
 
-  // Render theo thứ tự admin đã setup trong /admin/globals/home-page
-  return (
-    <>
-      {(layout as Record<string, unknown>[]).map((block, i) =>
-        renderBlock(block, locale, i),
-      )}
-    </>
-  )
+  // Render theo thứ tự admin đã setup trong Pages > home.
+  return <RenderBlocks blocks={layout} locale={locale} />
 }

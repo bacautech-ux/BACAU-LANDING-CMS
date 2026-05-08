@@ -1,6 +1,8 @@
 import React from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
+import config from '@payload-config'
+import { getPayload } from 'payload'
 
 interface NewsItem {
   slug: string
@@ -8,66 +10,223 @@ interface NewsItem {
   excerpt: string
   date: string
   image: string
-  featured?: boolean
 }
 
-const news: NewsItem[] = [
-  {
-    slug: 'du-an-binh-duong-2026',
-    title: 'Bắc Âu hoàn thành dự án tự động hóa nhà máy tại Bình Dương',
-    excerpt: 'Dự án triển khai hệ thống SCADA và PLC cho nhà máy sản xuất với quy mô lớn...',
-    date: '20 Tháng 3, 2026',
-    image: 'https://images.unsplash.com/photo-1761489798131-5cdde3262832?w=1200',
-    featured: true,
-  },
-  {
-    slug: 'hoi-thao-nang-luong-2026',
-    title: 'Hội thảo giải pháp quản lý năng lượng thông minh 2026',
-    excerpt: 'Bắc Âu đồng tổ chức hội thảo về các giải pháp tiết kiệm năng lượng cho khu công nghiệp...',
-    date: '15 Tháng 3, 2026',
-    image: 'https://images.unsplash.com/photo-1726866672851-5b99c837603c?w=600',
-  },
-  {
-    slug: 'hop-tac-nhat-ban-2026',
-    title: 'Bắc Âu ký kết hợp tác chiến lược với đối tác Nhật Bản',
-    excerpt: 'Thỏa thuận hợp tác trong lĩnh vực cung cấp thiết bị và chuyển giao công nghệ tự động hóa...',
-    date: '05 Tháng 3, 2026',
-    image: 'https://images.unsplash.com/photo-1731694406551-5f9522167493?w=600',
-  },
-]
+const defaultNewsImage = 'https://images.unsplash.com/photo-1761489798131-5cdde3262832?w=1200'
+
+function NewsSectionHeader({
+  title,
+  viewAllLabel,
+  viewAllHref,
+}: {
+  title: string
+  viewAllLabel: string
+  viewAllHref: string
+}) {
+  return (
+    <div className="mb-8 flex items-start justify-between gap-4 md:mb-6 xl:mb-10">
+      <div className="flex items-center gap-4">
+        <div className="h-8 w-1 bg-primary-red" />
+        <h2 className="text-[24px] font-bold tracking-[1px] text-text-primary md:text-[28px]">
+          {title}
+        </h2>
+      </div>
+      <Link href={viewAllHref} className="shrink-0 text-[13px] font-semibold text-primary-blue hover:underline md:text-[14px]">
+        {viewAllLabel}
+      </Link>
+    </div>
+  )
+}
 
 interface NewsSectionProps {
   locale: string
+  title?: string
+  viewAll?: {
+    label?: string | null
+    href?: string | null
+  }
+  sourceMode?: 'latest' | 'manual' | string | null
+  featuredNews?: unknown
+  secondaryNews?: unknown
+  count?: number | null
+  displayMode?: 'featured' | 'grid' | string | null
 }
 
-export function NewsSection({ locale }: NewsSectionProps) {
-  const featured = news[0]
-  const secondary = news.slice(1)
+interface MediaValue {
+  url?: string | null
+  filename?: string | null
+}
 
-  return (
-    <section className="bg-white" style={{ padding: '64px 80px' }}>
-      {/* Header */}
-      <div className="flex items-center justify-between mb-10">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-1 rounded-sm bg-primary-red" />
-          <h2 className="text-[28px] font-bold text-primary-navy tracking-[1.5px]">
-            TIN TỨC & SỰ KIỆN
-          </h2>
+interface NewsDocument {
+  slug?: string | null
+  title?: {
+    vi?: string | null
+    en?: string | null
+  } | null
+  excerpt?: {
+    vi?: string | null
+    en?: string | null
+  } | null
+  publishedAt?: string | null
+  thumbnail?: MediaValue | null
+}
+
+function getMediaURL(value: unknown): string | undefined {
+  if (!value || typeof value !== 'object') return undefined
+
+  const media = value as MediaValue
+  if (media.url) return media.url
+  if (media.filename) return `/api/media/file/${media.filename}`
+
+  return undefined
+}
+
+function formatDate(value: string | null | undefined, locale: string) {
+  if (!value) return ''
+
+  return new Intl.DateTimeFormat(locale === 'en' ? 'en-US' : 'vi-VN', {
+    day: '2-digit',
+    month: 'long',
+    year: 'numeric',
+  }).format(new Date(value))
+}
+
+function isNewsDocument(value: unknown): value is NewsDocument {
+  return Boolean(value && typeof value === 'object' && 'slug' in value)
+}
+
+function normalizeNewsDocument(doc: NewsDocument, locale: string): NewsItem | null {
+  if (!doc.slug) return null
+
+  const typedLocale = locale === 'en' ? 'en' : 'vi'
+  const fallbackLocale = typedLocale === 'en' ? 'vi' : 'en'
+  const title = doc.title?.[typedLocale] ?? doc.title?.[fallbackLocale]
+
+  if (!title) return null
+
+  return {
+    slug: doc.slug,
+    title,
+    excerpt: doc.excerpt?.[typedLocale] ?? doc.excerpt?.[fallbackLocale] ?? '',
+    date: formatDate(doc.publishedAt, locale),
+    image: getMediaURL(doc.thumbnail) ?? defaultNewsImage,
+  }
+}
+
+async function getLatestNews(locale: string, count: number) {
+  try {
+    const payload = await getPayload({ config })
+    const data = await payload.find({
+      collection: 'news',
+      where: {
+        _status: { equals: 'published' },
+      },
+      sort: '-publishedAt',
+      depth: 2,
+      limit: count,
+      locale: locale === 'en' ? 'en' : 'vi',
+      fallbackLocale: 'vi',
+    })
+
+    return data.docs
+      .map((doc) => normalizeNewsDocument(doc as NewsDocument, locale))
+      .filter((item): item is NewsItem => Boolean(item))
+  } catch {
+    return []
+  }
+}
+
+function normalizeSelectedNews(value: unknown, locale: string) {
+  if (Array.isArray(value)) {
+    return value
+      .filter(isNewsDocument)
+      .map((doc) => normalizeNewsDocument(doc, locale))
+      .filter((item): item is NewsItem => Boolean(item))
+  }
+
+  if (isNewsDocument(value)) {
+    const item = normalizeNewsDocument(value, locale)
+    return item ? [item] : []
+  }
+
+  return []
+}
+
+export async function NewsSection({
+  locale,
+  title = 'TIN TỨC & SỰ KIỆN',
+  viewAll,
+  sourceMode = 'latest',
+  featuredNews,
+  secondaryNews,
+  count = 3,
+  displayMode = 'featured',
+}: NewsSectionProps) {
+  const latestNews = await getLatestNews(locale, count ?? 3)
+  const selectedNews =
+    sourceMode === 'manual'
+      ? [...normalizeSelectedNews(featuredNews, locale), ...normalizeSelectedNews(secondaryNews, locale)]
+      : []
+  const visibleNews = [...selectedNews, ...latestNews].slice(0, 3)
+  if (visibleNews.length === 0) return null
+
+  const featured = visibleNews[0]
+  const secondary = visibleNews.slice(1, 3)
+  const viewAllHref = viewAll?.href ?? '/tin-tuc'
+  const viewAllLabel = viewAll?.label ?? 'Xem tất cả →'
+
+  /* ── Grid variant: 3 equal cards ── */
+  if (displayMode === 'grid') {
+    return (
+      <section className="bg-white px-4 py-8 md:px-6 md:py-12 xl:px-[60px] xl:py-16">
+        <NewsSectionHeader title={title} viewAllLabel={viewAllLabel} viewAllHref={`/${locale}${viewAllHref}`} />
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+          {visibleNews.map((item) => (
+            <Link
+              key={item.slug}
+              href={`/${locale}/tin-tuc/${item.slug}`}
+              className="flex flex-col overflow-hidden border border-border bg-white transition-shadow hover:shadow-md"
+            >
+              {/* Image */}
+              <div className="relative h-[200px] w-full overflow-hidden xl:h-[220px]">
+                <Image
+                  src={item.image}
+                  alt={item.title}
+                  fill
+                  className="object-cover transition-transform duration-300 hover:scale-105"
+                  sizes="(max-width: 767px) 100vw, 33vw"
+                />
+              </div>
+              {/* Body */}
+              <div className="flex flex-1 flex-col gap-3 p-5">
+                <span className="text-[12px] font-semibold text-text-secondary">
+                  {item.date}
+                </span>
+                <h3 className="line-clamp-2 text-[15px] font-bold leading-[1.4] text-text-primary">
+                  {item.title}
+                </h3>
+                <p className="line-clamp-3 text-[13px] leading-[1.5] text-text-secondary">
+                  {item.excerpt}
+                </p>
+              </div>
+            </Link>
+          ))}
         </div>
-        <Link
-          href={`/${locale}/tin-tuc`}
-          className="text-[14px] font-semibold text-primary-blue hover:underline"
-        >
-          Xem tất cả →
-        </Link>
-      </div>
+      </section>
+    )
+  }
+
+  /* ── Featured variant: 1 big left + 2 small right (default) ── */
+  return (
+    <section className="bg-white px-4 py-8 md:px-6 md:py-12 xl:px-[60px] xl:py-16">
+      <NewsSectionHeader title={title} viewAllLabel={viewAllLabel} viewAllHref={`/${locale}${viewAllHref}`} />
 
       {/* Cards row — featured left + 2 small right */}
-      <div className="grid grid-cols-[1fr_1fr] gap-6" style={{ height: 440 }}>
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-5 xl:gap-6">
         {/* Featured card — full image with overlay */}
         <Link
           href={`/${locale}/tin-tuc/${featured.slug}`}
-          className="relative flex flex-col justify-between rounded-xl overflow-hidden"
+          className="relative flex h-[280px] flex-col justify-between overflow-hidden rounded-lg md:h-[285px] md:rounded-xl xl:h-[440px]"
           style={{ boxShadow: '0 4px 20px #00000020' }}
         >
           <Image
@@ -75,59 +234,58 @@ export function NewsSection({ locale }: NewsSectionProps) {
             alt={featured.title}
             fill
             className="object-cover"
-            sizes="50vw"
+            sizes="(max-width: 767px) 100vw, 50vw"
           />
           {/* Date badge top */}
-          <div className="relative z-10 p-5">
-            <span className="inline-block px-3 py-1.5 rounded bg-primary-red text-white text-[11px] font-bold tracking-[0.5px]">
+          <div className="relative z-10 p-4 xl:p-5">
+            <span className="inline-block rounded bg-primary-red px-3 py-1.5 text-[11px] font-bold tracking-[0.5px] text-white">
               {featured.date}
             </span>
           </div>
           {/* Text overlay bottom */}
           <div
-            className="relative z-10 flex flex-col gap-2 p-7"
+            className="relative z-10 flex flex-col gap-2 p-4 xl:p-7"
             style={{
               background: 'linear-gradient(180deg, #00000000 0%, #000000BB 40%, #000000DD 100%)',
-              paddingTop: 80,
             }}
           >
-            <h3 className="text-[22px] font-bold text-white leading-[1.3]">
+            <h3 className="text-[18px] font-bold leading-[1.3] text-white xl:text-[22px]">
               {featured.title}
             </h3>
-            <p className="text-[14px] leading-[1.5]" style={{ color: '#FFFFFFAA' }}>
+            <p className="line-clamp-2 text-[13px] leading-[1.5] xl:text-[14px]" style={{ color: '#FFFFFFAA' }}>
               {featured.excerpt}
             </p>
           </div>
         </Link>
 
         {/* Right column — 2 small horizontal cards */}
-        <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-4 md:gap-5 xl:gap-6">
           {secondary.map((item) => (
             <Link
               key={item.slug}
               href={`/${locale}/tin-tuc/${item.slug}`}
-              className="flex flex-1 rounded-xl overflow-hidden border border-border bg-white hover:shadow-md transition-shadow"
+              className="flex min-h-[140px] overflow-hidden rounded-lg border border-border bg-white transition-shadow hover:shadow-md md:flex-1 md:rounded-xl"
               style={{ boxShadow: '0 2px 12px #00000012' }}
             >
               {/* Image */}
-              <div className="relative w-[220px] shrink-0">
+              <div className="relative w-[120px] shrink-0 md:w-[150px] xl:w-[220px]">
                 <Image
                   src={item.image}
                   alt={item.title}
                   fill
                   className="object-cover"
-                  sizes="220px"
+                  sizes="(max-width: 767px) 120px, (max-width: 1279px) 150px, 220px"
                 />
               </div>
               {/* Body */}
-              <div className="flex flex-col justify-center gap-2.5 p-5 flex-1">
-                <span className="inline-block self-start px-3 py-1 rounded bg-primary-red text-white text-[11px] font-bold">
+              <div className="flex flex-1 flex-col justify-center gap-2 p-4 xl:gap-2.5 xl:p-5">
+                <span className="inline-block self-start rounded bg-primary-red px-3 py-1 text-[10px] font-bold text-white xl:text-[11px]">
                   {item.date}
                 </span>
-                <h3 className="text-[15px] font-bold text-text-primary leading-[1.4]">
+                <h3 className="line-clamp-2 text-[14px] font-bold leading-[1.35] text-text-primary xl:text-[15px] xl:leading-[1.4]">
                   {item.title}
                 </h3>
-                <p className="text-[13px] text-text-secondary leading-[1.5]">
+                <p className="line-clamp-2 text-[12px] leading-[1.45] text-text-secondary xl:text-[13px] xl:leading-[1.5]">
                   {item.excerpt}
                 </p>
               </div>

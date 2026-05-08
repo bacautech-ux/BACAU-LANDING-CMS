@@ -6,8 +6,8 @@ async function seed() {
 
   const pages = [
     {
+      title: 'Giới thiệu công ty',
       slug: 'gioi-thieu',
-      template: 'about' as const,
       hero: {
         heading: 'CÔNG TY BẮC ÂU',
         breadcrumbLabel: 'Công ty BắcÂu',
@@ -15,8 +15,8 @@ async function seed() {
       },
     },
     {
+      title: 'Dự án tham khảo',
       slug: 'du-an-tham-khao',
-      template: 'projects' as const,
       hero: {
         heading: 'DỰ ÁN THAM KHẢO',
         breadcrumbLabel: 'Dự án Tham Khảo',

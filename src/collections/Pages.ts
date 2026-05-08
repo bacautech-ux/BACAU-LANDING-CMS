@@ -1,62 +1,112 @@
 import type { CollectionConfig } from 'payload'
+import {
+  PageLayoutBlocks,
+} from '../blocks'
 
 export const Pages: CollectionConfig = {
   slug: 'pages',
   labels: { singular: 'Trang', plural: 'Các Trang' },
+  hooks: {
+    beforeValidate: [
+      ({ data, originalDoc }) => {
+        if (originalDoc?.slug === 'home') {
+          return { ...data, slug: 'home' }
+        }
+
+        return data
+      },
+    ],
+  },
   admin: {
     group: 'Cấu hình Website',
-    useAsTitle: 'slug',
-    description: 'Quản lý trang tĩnh — admin tự tạo URL, chọn template',
+    useAsTitle: 'title',
+    description: 'Quản lý trang website — admin tự tạo URL, chọn template và sắp xếp section',
+    components: {
+      views: {
+        blockLibraryRedirect: {
+          Component: '/src/components/admin/BlockLibraryRedirect.tsx#BlockLibraryRedirect',
+          path: '/block-library',
+        },
+      },
+    },
   },
   access: {
     read: () => true,
+    create: () => true,
+    update: () => true,
+    delete: () => true,
   },
   fields: [
+    {
+      name: 'title',
+      type: 'text',
+      localized: true,
+      label: 'Tên trang',
+    },
     {
       name: 'slug',
       type: 'text',
       required: true,
       unique: true,
-      label: 'Đường dẫn URL',
+      label: 'Slug / mã trang',
       admin: {
-        description: 'VD: gioi-thieu, du-an-tham-khao, lien-he (không có dấu /)',
+        description: 'Dùng để định danh page trong CMS. Riêng Trang chủ dùng "home"; URL public là /vi hoặc /en.',
+        components: {
+          Cell: '/src/components/admin/PagePreviewCell#PagePreviewCell',
+        },
       },
     },
     {
       name: 'template',
       type: 'select',
-      required: true,
+      defaultValue: 'builder',
       label: 'Template',
       admin: {
-        description: 'Chọn layout hiển thị cho trang này',
+        hidden: true,
+        description: 'Legacy field, không dùng trong admin. Page hiện render bằng layout blocks.',
       },
       options: [
+        { label: 'Trang chủ', value: 'home' },
+        { label: 'Page builder', value: 'builder' },
         { label: 'Giới thiệu công ty', value: 'about' },
         { label: 'Dự án tham khảo', value: 'projects' },
       ],
     },
     {
-      name: 'hero',
+      name: 'layout',
+      type: 'blocks',
+      label: 'Bố cục nội dung',
+      labels: {
+        singular: 'Section',
+        plural: 'Sections',
+      },
+      admin: {
+        description: 'Dùng cho Trang chủ và các trang page-builder. Giữ cùng cấu trúc block với Home Page cũ.',
+      },
+      blocks: PageLayoutBlocks,
+    },
+    {
+      name: 'seo',
       type: 'group',
-      label: 'Hero Section',
+      label: 'SEO',
       fields: [
         {
-          name: 'heading',
+          name: 'title',
           type: 'text',
-          label: 'Tiêu đề lớn',
           localized: true,
+          label: 'SEO title',
         },
         {
-          name: 'breadcrumbLabel',
-          type: 'text',
-          label: 'Nhãn breadcrumb',
+          name: 'description',
+          type: 'textarea',
           localized: true,
+          label: 'SEO description',
         },
         {
-          name: 'backgroundImage',
+          name: 'image',
           type: 'upload',
           relationTo: 'media',
-          label: 'Ảnh nền hero',
+          label: 'Ảnh chia sẻ',
         },
       ],
     },

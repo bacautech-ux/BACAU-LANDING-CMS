@@ -37,14 +37,7 @@ export function ProjectFilterBar({
   return (
     <div className="bg-white flex flex-col">
       {/* Parent tabs row */}
-      <div
-        className="flex items-stretch"
-        style={{
-          paddingLeft: 60,
-          paddingRight: 60,
-          borderBottom: '2px solid #B92C32',
-        }}
-      >
+      <div className="flex items-stretch overflow-x-auto px-4 md:px-6 xl:px-[60px]" style={{ borderBottom: '2px solid #B92C32' }}>
         {parents.map((p) => {
           const isActive = activeParent === p.value
           return (
@@ -53,13 +46,13 @@ export function ProjectFilterBar({
               onClick={() => { onParentChange(p.value); onSubChange('all') }}
               className="cursor-pointer transition-colors whitespace-nowrap"
               style={{
-                padding: '16px 24px',
-                fontSize: 14,
+                padding: '14px 18px',
+                fontSize: 13,
                 fontWeight: isActive ? 700 : 500,
                 color: isActive ? '#ffffff' : '#64748B',
                 background: isActive ? '#2b358c' : 'transparent',
                 borderBottom: isActive ? '3px solid #B92C32' : '3px solid transparent',
-                marginBottom: -2, // overlap the container border
+                marginBottom: -2,
               }}
             >
               {p.label}
@@ -69,13 +62,7 @@ export function ProjectFilterBar({
       </div>
 
       {/* Sub-industry tags row */}
-      <div
-        className="flex items-center flex-wrap gap-y-1"
-        style={{
-          padding: '12px 60px',
-          borderBottom: '1px solid #E2E8F0',
-        }}
-      >
+      <div className="flex items-center overflow-x-auto px-4 py-3 md:px-6 xl:px-[60px]" style={{ borderBottom: '1px solid #E2E8F0' }}>
         {allSubs.map((s, i) => {
           const isActive = activeSub === s.value
           return (

@@ -1,174 +1,224 @@
-'use client'
-
-import React, { useState } from 'react'
-import Image from 'next/image'
+import React from 'react'
 import Link from 'next/link'
+import config from '@payload-config'
+import { getPayload } from 'payload'
+import {
+  FeaturedProjectCard,
+  FeaturedProjectsClient,
+  FeaturedProjectTab,
+} from './FeaturedProjectsClient'
 
-interface Project {
-  slug: string
-  title: string
-  description: string
-  category: string
-  badgeColor: string
-  badgeLabel: string
-  image: string
+interface MediaValue {
+  url?: string | null
+  filename?: string | null
 }
 
-const projects: Project[] = [
-  {
-    slug: 'quan-ly-nang-luong-kcn-viet-nam',
-    title: 'Hệ thống quản lý năng lượng KCN Việt Nam - Singapore',
-    description: 'Thiết kế và thi công hệ thống giám sát năng lượng toàn diện',
-    category: 'energy',
-    badgeColor: '#2b358c',
-    badgeLabel: 'Năng lượng',
-    image: 'https://images.unsplash.com/photo-1760456307112-e69c5ede808d?w=800',
-  },
-  {
-    slug: 'tram-bien-ap-formosa',
-    title: 'Trạm biến áp 110kV Nhà máy thép Formosa',
-    description: 'Cung cấp và lắp đặt hệ thống điện trung thế và hạ thế',
-    category: 'electrical',
-    badgeColor: '#B92C32',
-    badgeLabel: 'Điện CN',
-    image: 'https://images.unsplash.com/photo-1509391111737-9b07f052f6b6?w=800',
-  },
-  {
-    slug: 'tu-dong-hoa-nestle',
-    title: 'Tự động hóa dây chuyền sản xuất Nestlé Việt Nam',
-    description: 'Lập trình PLC và tích hợp hệ thống SCADA cho dây chuyền đóng gói',
-    category: 'automation',
-    badgeColor: '#2b358c',
-    badgeLabel: 'Tự động hóa',
-    image: 'https://images.unsplash.com/photo-1735494034604-cab3f6a42683?w=800',
-  },
-  {
-    slug: 'bms-landmark-81',
-    title: 'Hệ thống BMS tòa nhà Landmark 81',
-    description: 'Triển khai hệ thống quản lý tòa nhà thông minh tích hợp',
-    category: 'bms',
-    badgeColor: '#6366F1',
-    badgeLabel: 'BMS',
-    image: 'https://images.unsplash.com/photo-1703355685626-57abd3bfbd95?w=800',
-  },
-]
+interface ProjectDocument {
+  slug?: string | null
+  title?: {
+    vi?: string | null
+    en?: string | null
+  } | null
+  summary?: {
+    vi?: string | null
+    en?: string | null
+  } | null
+  thumbnail?: MediaValue | null
+  featuredType?: string | null
+  featuredBadgeLabel?:
+    | string
+    | {
+        vi?: string | null
+        en?: string | null
+      }
+    | null
+  featuredBadgeColor?: string | null
+}
 
-const tabs = [
+interface FeaturedProjectsProps {
+  locale: string
+  title?: string
+  backgroundColor?: string | null
+  textTheme?: 'dark' | 'light' | string | null
+  viewAll?: {
+    label?: string | null
+    href?: string | null
+  }
+  sourceMode?: 'latest' | 'manual' | string | null
+  count?: number | null
+  featuredProjects?: unknown
+  tabs?: {
+    label?: string | null
+    value?: string | null
+  }[]
+}
+
+const defaultTabs: FeaturedProjectTab[] = [
   { label: 'Quản lý năng lượng', value: 'energy' },
   { label: 'Điện công nghiệp', value: 'electrical' },
   { label: 'Tự động hóa', value: 'automation' },
   { label: 'Hệ thống BMS', value: 'bms' },
 ]
 
-interface FeaturedProjectsProps {
-  locale: string
+const badgeLabels: Record<string, string> = {
+  energy: 'Năng lượng',
+  electrical: 'Điện CN',
+  automation: 'Tự động hóa',
+  bms: 'BMS',
 }
 
-export function FeaturedProjects({ locale }: FeaturedProjectsProps) {
-  const [active, setActive] = useState('energy')
+const badgeColors: Record<string, string> = {
+  energy: '#2b358c',
+  electrical: '#B92C32',
+  automation: '#2b358c',
+  bms: '#6366F1',
+}
 
-  // Show all 4 projects always (design shows 4 in 2x2 grid), highlight active tab
-  const displayed = projects
+const defaultProjectImage = 'https://images.unsplash.com/photo-1760456307112-e69c5ede808d?w=800'
+
+function getMediaURL(value: unknown): string | undefined {
+  if (!value || typeof value !== 'object') return undefined
+
+  const media = value as MediaValue
+  if (media.url) return media.url
+  if (media.filename) return `/api/media/file/${media.filename}`
+
+  return undefined
+}
+
+function isProjectDocument(value: unknown): value is ProjectDocument {
+  return Boolean(value && typeof value === 'object' && 'slug' in value)
+}
+
+function getLocalizedText(
+  value: string | { vi?: string | null; en?: string | null } | null | undefined,
+  locale: string,
+) {
+  if (typeof value === 'string') return value
+  if (!value || typeof value !== 'object') return undefined
+
+  const typedLocale = locale === 'en' ? 'en' : 'vi'
+  const fallbackLocale = typedLocale === 'en' ? 'vi' : 'en'
+
+  return value[typedLocale] ?? value[fallbackLocale] ?? undefined
+}
+
+function normalizeProject(doc: ProjectDocument, locale: string): FeaturedProjectCard | null {
+  if (!doc.slug) return null
+
+  const typedLocale = locale === 'en' ? 'en' : 'vi'
+  const fallbackLocale = typedLocale === 'en' ? 'vi' : 'en'
+  const title = doc.title?.[typedLocale] ?? doc.title?.[fallbackLocale]
+
+  if (!title) return null
+
+  const featuredType = doc.featuredType ?? 'energy'
+
+  return {
+    slug: doc.slug,
+    title,
+    description: doc.summary?.[typedLocale] ?? doc.summary?.[fallbackLocale] ?? '',
+    image: getMediaURL(doc.thumbnail) ?? defaultProjectImage,
+    featuredType,
+    badgeColor: doc.featuredBadgeColor ?? badgeColors[featuredType] ?? '#2b358c',
+    badgeLabel: getLocalizedText(doc.featuredBadgeLabel, locale) ?? badgeLabels[featuredType] ?? 'Dự án',
+  }
+}
+
+function normalizeSelectedProjects(value: unknown, locale: string) {
+  if (!Array.isArray(value)) return []
+
+  return value
+    .filter(isProjectDocument)
+    .map((doc) => normalizeProject(doc, locale))
+    .filter((item): item is FeaturedProjectCard => Boolean(item))
+}
+
+async function getLatestFeaturedProjects(locale: string, count: number) {
+  try {
+    const payload = await getPayload({ config })
+    const data = await payload.find({
+      collection: 'projects',
+      where: {
+        and: [
+          { _status: { equals: 'published' } },
+          { featured: { equals: true } },
+        ],
+      },
+      sort: '-year',
+      depth: 2,
+      limit: count,
+      locale: locale === 'en' ? 'en' : 'vi',
+      fallbackLocale: 'vi',
+    })
+
+    return data.docs
+      .map((doc) => normalizeProject(doc as ProjectDocument, locale))
+      .filter((item): item is FeaturedProjectCard => Boolean(item))
+  } catch {
+    return []
+  }
+}
+
+export async function FeaturedProjects({
+  locale,
+  title = 'DỰ ÁN TIÊU BIỂU',
+  backgroundColor = '#0B1221',
+  textTheme = 'dark',
+  viewAll,
+  sourceMode = 'latest',
+  count = 4,
+  featuredProjects,
+  tabs,
+}: FeaturedProjectsProps) {
+  const isLight = textTheme === 'light'
+  const displayLimit = count ?? 4
+  const fetchLimit = Math.max(displayLimit * 6, 24)
+  const latestProjects = await getLatestFeaturedProjects(locale, fetchLimit)
+  const selectedProjects =
+    sourceMode === 'manual' ? normalizeSelectedProjects(featuredProjects, locale) : []
+  const projects = [...selectedProjects, ...latestProjects]
+
+  if (projects.length === 0) return null
+
+  const visibleTabs =
+    tabs
+      ?.filter((tab) => tab.label && tab.value)
+      .map((tab) => ({ label: tab.label as string, value: tab.value as string })) ?? defaultTabs
+  const viewAllHref = viewAll?.href ?? '/du-an-tham-khao'
+  const viewAllLabel = viewAll?.label ?? 'Xem tất cả →'
 
   return (
-    <section className="bg-primary-navy" style={{ padding: '64px 80px' }}>
-      {/* Header */}
-      <div className="flex items-center justify-between mb-10">
+    <section
+      className="px-4 py-8 md:px-6 md:py-12 xl:px-[60px] xl:py-16"
+      style={{ background: backgroundColor ?? '#0B1221' }}
+    >
+      <div className="mb-8 flex items-start justify-between gap-4 md:mb-8 xl:mb-10">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-1 rounded-sm bg-primary-red" />
-          <h2 className="text-[28px] font-bold text-white tracking-[1.5px]">
-            DỰ ÁN TIÊU BIỂU
+          <div className="h-1 w-9 rounded-sm bg-primary-red md:w-10" />
+          <h2
+            className="text-[24px] font-bold tracking-[1px] md:text-[28px] md:tracking-[1.5px]"
+            style={{ color: isLight ? '#111111' : '#FFFFFF' }}
+          >
+            {title}
           </h2>
         </div>
         <Link
-          href={`/${locale}/du-an-tham-khao`}
-          className="text-[14px] font-semibold hover:underline"
-          style={{ color: '#FFFFFFBB' }}
+          href={`/${locale}${viewAllHref}`}
+          className="shrink-0 text-[13px] font-semibold hover:underline md:text-[14px]"
+          style={{ color: isLight ? '#2b358c' : '#FFFFFFBB' }}
         >
-          Xem tất cả →
+          {viewAllLabel}
         </Link>
       </div>
 
-      {/* Filter tabs — pill style */}
-      <div className="flex items-center gap-2 mb-8">
-        {tabs.map((tab) => (
-          <button
-            key={tab.value}
-            onClick={() => setActive(tab.value)}
-            className="px-6 py-2.5 rounded-full text-[13px] transition-all cursor-pointer"
-            style={
-              active === tab.value
-                ? { background: '#B92C32', color: '#fff', fontWeight: 600 }
-                : {
-                    background: '#FFFFFF15',
-                    color: '#FFFFFFCC',
-                    fontWeight: 500,
-                    border: '1px solid #FFFFFF30',
-                  }
-            }
-          >
-            {tab.label}
-          </button>
-        ))}
-      </div>
-
-      {/* 2×2 grid */}
-      <div className="flex flex-col gap-6">
-        {/* Row 1 */}
-        <div className="grid grid-cols-2 gap-6" style={{ height: 280 }}>
-          {displayed.slice(0, 2).map((p) => (
-            <ProjectCard key={p.slug} project={p} locale={locale} />
-          ))}
-        </div>
-        {/* Row 2 */}
-        <div className="grid grid-cols-2 gap-6" style={{ height: 280 }}>
-          {displayed.slice(2, 4).map((p) => (
-            <ProjectCard key={p.slug} project={p} locale={locale} />
-          ))}
-        </div>
-      </div>
-    </section>
-  )
-}
-
-function ProjectCard({ project, locale }: { project: Project; locale: string }) {
-  return (
-    <Link
-      href={`/${locale}/chi-tiet-du-an/${project.slug}`}
-      className="relative flex flex-col justify-between rounded-xl overflow-hidden h-full"
-      style={{ border: '1px solid #FFFFFF20' }}
-    >
-      <Image
-        src={project.image}
-        alt={project.title}
-        fill
-        className="object-cover"
-        sizes="50vw"
+      <FeaturedProjectsClient
+        locale={locale}
+        projects={projects}
+        tabs={visibleTabs}
+        displayLimit={displayLimit}
+        isLight={isLight}
       />
-      {/* Badge top */}
-      <div className="relative z-10 p-4">
-        <span
-          className="inline-block px-3 py-1 rounded-full text-white text-[11px] font-semibold"
-          style={{ background: project.badgeColor }}
-        >
-          {project.badgeLabel}
-        </span>
-      </div>
-      {/* Text overlay bottom */}
-      <div
-        className="relative z-10 flex flex-col gap-1.5 p-4"
-        style={{
-          background: 'linear-gradient(180deg, #00000000 0%, #000000BB 40%, #000000DD 100%)',
-          paddingTop: 60,
-        }}
-      >
-        <h3 className="text-[15px] font-bold text-white leading-[1.4]">
-          {project.title}
-        </h3>
-        <p className="text-[13px] leading-[1.4]" style={{ color: '#FFFFFFAA' }}>
-          {project.description}
-        </p>
-      </div>
-    </Link>
+    </section>
   )
 }

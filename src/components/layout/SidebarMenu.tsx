@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import React from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
@@ -21,25 +21,18 @@ interface SidebarMenuProps {
 
 export function SidebarMenu({ groups }: SidebarMenuProps) {
   const pathname = usePathname()
-  const [openGroup, setOpenGroup] = useState<number | null>(null)
 
   return (
-    <nav className="flex flex-col" style={{ width: 340 }}>
+    <nav className="flex w-full flex-col rounded-sm bg-transparent lg:w-[340px]">
       {groups.map((group, gi) => {
         const isGroupActive =
           (group.titleHref && pathname === group.titleHref) ||
           group.items.some((item) => pathname === item.href || pathname.startsWith(item.href + '/'))
-        const isOpen = isGroupActive || openGroup === gi
 
         return (
           <React.Fragment key={gi}>
-            <div className="flex flex-col items-end gap-1.5 py-4">
-              {/* Group title */}
-              <button
-                onClick={() => setOpenGroup(isOpen ? null : gi)}
-                className="text-right text-[14px] font-bold text-text-primary w-full cursor-pointer"
-                style={{ textAlign: 'right' }}
-              >
+            <div className="flex flex-col gap-1.5 py-4 text-right">
+              <div className="w-full text-right text-[18px] font-bold text-text-primary">
                 {group.titleHref ? (
                   <Link
                     href={group.titleHref}
@@ -52,18 +45,16 @@ export function SidebarMenu({ groups }: SidebarMenuProps) {
                     {group.title}
                   </span>
                 )}
-              </button>
+              </div>
 
-              {/* Sub-items */}
               {group.items.map((item) => {
-                const isActive = pathname === item.href
+                const isActive = pathname === item.href || pathname.startsWith(item.href + '/')
                 return (
                   <Link
                     key={item.href}
                     href={item.href}
-                    className="text-right text-[13px] w-full transition-colors"
+                    className="w-full text-right text-[15px] transition-colors"
                     style={{
-                      textAlign: 'right',
                       color: isActive ? '#2b358c' : '#64748B',
                       fontWeight: isActive ? 600 : 400,
                     }}
@@ -74,7 +65,6 @@ export function SidebarMenu({ groups }: SidebarMenuProps) {
               })}
             </div>
 
-            {/* Divider — không có sau group cuối */}
             {gi < groups.length - 1 && (
               <div className="w-full h-px bg-border" />
             )}
