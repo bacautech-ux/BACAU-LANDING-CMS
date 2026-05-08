@@ -27,14 +27,14 @@ export const cloudinaryAdapter = (): Adapter =>
       name: 'cloudinary',
 
       handleUpload: async ({ file }) => {
+        const publicId = `${folder}/${file.filename.replace(/\.[^/.]+$/, '')}`
+
         const result = await new Promise<{ secure_url: string }>(
           (resolve, reject) => {
             const stream = cloudinary.uploader.upload_stream(
               {
-                folder,
+                public_id: publicId,
                 resource_type: 'auto',
-                use_filename: true,
-                unique_filename: false,
                 overwrite: true,
               },
               (error, result) => {

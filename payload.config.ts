@@ -77,9 +77,8 @@ export default buildConfig({
     pool: {
       connectionString: process.env.DATABASE_URL ?? '',
     },
-    // Dev: push trực tiếp (tiện nhưng hỏi Y/N)
-    // Production: dùng migrations (tự động, không hỏi)
     push: process.env.NODE_ENV === 'development',
+    migrations: [],
   }),
   sharp,
 })

@@ -6,13 +6,10 @@
   "scripts": {
     "dev": "NODE_OPTIONS='--max-old-space-size=4096' node node_modules/next/dist/bin/next dev",
     "generate:importmap": "PAYLOAD_CONFIG_PATH=payload.config.ts node_modules/.bin/payload generate:importMap",
-    "migrate": "PAYLOAD_CONFIG_PATH=payload.config.ts node_modules/.bin/payload migrate",
-    "migrate:create": "PAYLOAD_CONFIG_PATH=payload.config.ts node_modules/.bin/payload migrate:create",
     "build": "node node_modules/next/dist/bin/next build",
     "start": "node node_modules/next/dist/bin/next start",
     "seed": "PAYLOAD_CONFIG_PATH=payload.config.ts node_modules/.bin/payload run src/seed.ts",
-    "migrate:home-page": "NODE_ENV=development PAYLOAD_CONFIG_PATH=payload.config.ts node_modules/.bin/payload run src/scripts/runMigrateHomeGlobalToPage.ts",
-    "lint": "node node_modules/eslint/bin/eslint.js"
+"lint": "node node_modules/eslint/bin/eslint.js"
   },
   "dependencies": {
     "@payloadcms/db-postgres": "^3.84.0",
