@@ -5,6 +5,7 @@ import { getMessages } from 'next-intl/server'
 import { Inter } from 'next/font/google'
 import { Header } from '@/components/layout/Header/Header'
 import { Footer } from '@/components/layout/Footer'
+import { PageTransition } from '@/components/ui/PageTransition'
 import '@/app/globals.css'
 
 const inter = Inter({ subsets: ['latin', 'vietnamese'], variable: '--font-inter' })
@@ -32,6 +33,7 @@ export default async function LocaleLayout({
     <html lang={locale} className={inter.variable}>
       <body className="font-sans antialiased">
         <NextIntlClientProvider messages={messages}>
+          <PageTransition />
           <Header locale={locale} />
           <main>{children}</main>
           <Footer locale={locale} />
