@@ -70,18 +70,18 @@ export function PageTransition() {
   return (
     <AnimatePresence>
       {show && (
-        <>
-          <motion.div
-            className="fixed inset-0 z-[9998] bg-white"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
-          />
+        <motion.div
+          key="page-transition"
+          className="fixed inset-0 z-[9998] bg-white pointer-events-none"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.25 }}
+        >
           {pieces.map((p, i) => (
             <motion.div
               key={i}
-              className="fixed z-[9999] pointer-events-none"
+              className="absolute"
               style={{
                 left: '50%',
                 top: '50%',
@@ -91,17 +91,12 @@ export function PageTransition() {
                 height: H,
                 clipPath: p.clip,
               }}
-              initial={{ x: p.x, y: p.y, opacity: 0 }}
               animate={
                 phase === 'enter'
-                  ? { x: 0, y: 0, opacity: 1 }
-                  : {
-                      x: [0, p.x * 0.22, 0],
-                      y: [0, p.y * 0.22, 0],
-                      opacity: 1,
-                    }
+                  ? { x: 0, y: 0 }
+                  : { x: [0, p.x * 0.22, 0], y: [0, p.y * 0.22, 0] }
               }
-              exit={{ x: p.x, y: p.y, opacity: 0 }}
+              initial={{ x: p.x, y: p.y }}
               transition={
                 phase === 'enter'
                   ? { duration: 0.35, delay: i * 0.05, ease: 'easeInOut' }
@@ -118,7 +113,7 @@ export function PageTransition() {
               />
             </motion.div>
           ))}
-        </>
+        </motion.div>
       )}
     </AnimatePresence>
   )
