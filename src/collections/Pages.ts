@@ -1,4 +1,5 @@
 import type { CollectionConfig } from 'payload'
+import { revalidatePath } from 'next/cache'
 import {
   PageLayoutBlocks,
 } from '../blocks'
@@ -14,6 +15,19 @@ export const Pages: CollectionConfig = {
         }
 
         return data
+      },
+    ],
+    afterChange: [
+      ({ doc }) => {
+        const slug = doc?.slug
+        if (slug === 'home') {
+          revalidatePath('/vi')
+          revalidatePath('/en')
+          revalidatePath('/')
+        } else if (slug) {
+          revalidatePath(`/vi/${slug}`)
+          revalidatePath(`/en/${slug}`)
+        }
       },
     ],
   },

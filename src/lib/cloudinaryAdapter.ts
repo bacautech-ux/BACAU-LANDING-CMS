@@ -60,11 +60,25 @@ export const cloudinaryAdapter = (): Adapter =>
 
       staticHandler: async (_req, { params, doc }) => {
         const url = (doc as Record<string, unknown> | undefined)?.url as string | undefined
+        const filename = params.filename
+        const isVideo = /\.(mp4|webm|mov|avi|mkv|ogg)$/i.test(filename)
+
         if (url?.startsWith('https://res.cloudinary.com')) {
+          // Fix wrong resource type if video was stored with /image/upload/ path
+          if (isVideo && url.includes('/image/upload/')) {
+            return Response.redirect(url.replace('/image/upload/', '/video/upload/'), 302)
+          }
           return Response.redirect(url, 302)
         }
-        const publicId = `${folder}/${params.filename}`
-        return Response.redirect(cloudinary.url(publicId, { secure: true }), 302)
+
+        // Fallback: generate Cloudinary URL with correct resource type
+        // Strip extension to match how handleUpload stores publicId
+        const publicId = `${folder}/${filename.replace(/\.[^/.]+$/, '')}`
+        const resourceType = isVideo ? 'video' : 'image'
+        return Response.redirect(
+          cloudinary.url(publicId, { secure: true, resource_type: resourceType }),
+          302,
+        )
       },
     }
   }
