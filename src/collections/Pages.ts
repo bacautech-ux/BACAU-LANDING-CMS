@@ -20,13 +20,18 @@ export const Pages: CollectionConfig = {
     afterChange: [
       ({ doc }) => {
         const slug = doc?.slug
+        const base = process.env.NEXT_PUBLIC_SERVER_URL ?? 'https://bacau-landing-cms.vercel.app'
         if (slug === 'home') {
           revalidatePath('/vi')
           revalidatePath('/en')
           revalidatePath('/')
+          fetch(`${base}/vi`, { cache: 'no-store' }).catch(() => null)
+          fetch(`${base}/en`, { cache: 'no-store' }).catch(() => null)
         } else if (slug) {
           revalidatePath(`/vi/${slug}`)
           revalidatePath(`/en/${slug}`)
+          fetch(`${base}/vi/${slug}`, { cache: 'no-store' }).catch(() => null)
+          fetch(`${base}/en/${slug}`, { cache: 'no-store' }).catch(() => null)
         }
       },
     ],
