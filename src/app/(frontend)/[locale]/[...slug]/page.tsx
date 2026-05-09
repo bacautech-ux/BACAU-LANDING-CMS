@@ -2,6 +2,8 @@ import { notFound } from 'next/navigation'
 import { redirect } from 'next/navigation'
 import { getPayload } from 'payload'
 import config from '@payload-config'
+
+export const revalidate = 3600
 import { RenderBlocks } from '@/components/blocks/RenderBlocks'
 
 type Locale = 'vi' | 'en'

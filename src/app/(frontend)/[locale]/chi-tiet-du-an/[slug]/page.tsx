@@ -3,6 +3,8 @@ import Image from 'next/image'
 import { notFound } from 'next/navigation'
 import config from '@payload-config'
 import { getPayload } from 'payload'
+
+export const revalidate = 3600
 import { BreadcrumbBar } from '@/components/sections/PageHero'
 import { ContentSection } from '@/components/ui/ContentSection'
 import { BulletList } from '@/components/sections/ArticleSection'

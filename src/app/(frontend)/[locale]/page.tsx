@@ -1,6 +1,8 @@
 import React from 'react'
 import config from '@payload-config'
 import { getPayload } from 'payload'
+
+export const revalidate = 3600
 import { RenderBlocks } from '@/components/blocks/RenderBlocks'
 import { HeroSection } from '@/components/sections/HeroSection'
 import { ServicesSection } from '@/components/sections/ServicesSection'
