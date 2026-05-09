@@ -1,4 +1,5 @@
 import type { GlobalConfig } from 'payload'
+import { revalidatePath } from 'next/cache'
 import {
   HeroBlock,
   ServicesBlock,
@@ -13,8 +14,11 @@ import {
 export const HomePage: GlobalConfig = {
   slug: 'home-page',
   label: 'Trang Chủ',
+  hooks: {
+    afterChange: [() => { revalidatePath('/vi'); revalidatePath('/en') }],
+  },
   access: {
-    read: () => true, // public — frontend cần đọc không cần auth
+    read: () => true,
   },
   admin: {
     group: 'Cấu hình Website',

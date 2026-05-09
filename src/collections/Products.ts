@@ -1,10 +1,20 @@
 import type { CollectionConfig } from 'payload'
+import { revalidatePath } from 'next/cache'
+
+const revalidateProducts = () => {
+  revalidatePath('/vi/san-pham')
+  revalidatePath('/en/san-pham')
+  revalidatePath('/vi')
+  revalidatePath('/en')
+}
 
 export const Products: CollectionConfig = {
   slug: 'products',
   admin: { useAsTitle: 'nameLabel' },
   versions: { drafts: true },
   hooks: {
+    afterChange: [revalidateProducts],
+    afterDelete: [revalidateProducts],
     beforeValidate: [
       ({ data }) => {
         if (!data) return data

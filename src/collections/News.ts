@@ -1,10 +1,24 @@
 import type { CollectionConfig } from 'payload'
+import { revalidatePath } from 'next/cache'
+
+const revalidateNews = ({ doc }: { doc: { slug?: string } }) => {
+  revalidatePath('/vi/tin-tuc')
+  revalidatePath('/en/tin-tuc')
+  revalidatePath('/vi')
+  revalidatePath('/en')
+  if (doc?.slug) {
+    revalidatePath(`/vi/tin-tuc/${doc.slug}`)
+    revalidatePath(`/en/tin-tuc/${doc.slug}`)
+  }
+}
 
 export const News: CollectionConfig = {
   slug: 'news',
   admin: { useAsTitle: 'titleLabel' },
   versions: { drafts: true },
   hooks: {
+    afterChange: [revalidateNews],
+    afterDelete: [revalidateNews],
     beforeValidate: [
       ({ data }) => {
         if (!data) return data

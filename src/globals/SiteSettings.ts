@@ -1,4 +1,5 @@
 import type { GlobalConfig } from 'payload'
+import { revalidatePath } from 'next/cache'
 
 const defaultNavItems = [
   {
@@ -64,6 +65,9 @@ const defaultFooterColumns = [
 export const SiteSettings: GlobalConfig = {
   slug: 'site-settings',
   label: 'Thiết lập Header/Footer',
+  hooks: {
+    afterChange: [() => revalidatePath('/', 'layout')],
+  },
   access: {
     read: () => true,
   },
