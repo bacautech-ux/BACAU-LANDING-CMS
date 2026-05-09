@@ -3,10 +3,21 @@ import Image from 'next/image'
 import { notFound } from 'next/navigation'
 import config from '@payload-config'
 import { getPayload } from 'payload'
+import { setRequestLocale } from 'next-intl/server'
+import { BreadcrumbBar } from '@/components/sections/PageHero'
 
 export const revalidate = 3600
-import { BreadcrumbBar } from '@/components/sections/PageHero'
 import { ContentSection } from '@/components/ui/ContentSection'
+
+const locales = ['vi', 'en']
+
+export async function generateStaticParams() {
+  const payload = await getPayload({ config })
+  const projects = await payload.find({ collection: 'projects', limit: 200 })
+  return projects.docs
+    .filter((p) => p.slug)
+    .flatMap((p) => locales.map((locale) => ({ locale, slug: p.slug as string })))
+}
 import { BulletList } from '@/components/sections/ArticleSection'
 import { BrandLogos } from '@/components/sections/BrandLogos'
 
@@ -119,6 +130,7 @@ export default async function ProjectDetailPage({
   params: Promise<{ locale: string; slug: string }>
 }) {
   const { locale, slug } = await params
+  setRequestLocale(locale)
   const payload = await getPayload({ config })
   const { docs } = await payload.find({
     collection: 'projects',

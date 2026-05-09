@@ -1,9 +1,10 @@
 import React from 'react'
 import config from '@payload-config'
 import { getPayload } from 'payload'
+import { setRequestLocale } from 'next-intl/server'
+import { RenderBlocks } from '@/components/blocks/RenderBlocks'
 
 export const revalidate = 3600
-import { RenderBlocks } from '@/components/blocks/RenderBlocks'
 import { HeroSection } from '@/components/sections/HeroSection'
 import { ServicesSection } from '@/components/sections/ServicesSection'
 import { NewsSection } from '@/components/sections/NewsSection'
@@ -71,6 +72,7 @@ function DefaultLayout({ locale }: { locale: string }) {
 
 export default async function Page({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params
+  setRequestLocale(locale)
   const layout = await getHomePageLayout(locale === 'en' ? 'en' : 'vi')
 
   // Nếu Payload chưa có data → dùng layout mặc định
