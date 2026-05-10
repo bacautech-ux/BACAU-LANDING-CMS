@@ -16,7 +16,7 @@ export const Partners: CollectionConfig = {
   },
   fields: [
     { name: 'name', type: 'text', required: true },
-    { name: 'logo', type: 'upload', relationTo: 'media', required: true },
+    { name: 'logo', type: 'upload', relationTo: 'media' },
     { name: 'website', type: 'text' },
     { name: 'order', type: 'number', defaultValue: 0, admin: { position: 'sidebar' } },
   ],

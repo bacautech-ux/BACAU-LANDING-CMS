@@ -321,9 +321,20 @@ export interface Page {
         | {
             title: string;
             /**
-             * Nếu để trống sẽ dùng tiêu đề trang.
+             * Danh sách breadcrumb. Item cuối không cần href.
+             */
+            breadcrumbs?:
+              | {
+                  label: string;
+                  href?: string | null;
+                  id?: string | null;
+                }[]
+              | null;
+            /**
+             * Dùng khi không set Breadcrumbs ở trên. Nếu để trống sẽ dùng tiêu đề trang.
              */
             breadcrumbLabel?: string | null;
+            height?: ('sm' | 'md' | 'lg' | 'xl') | null;
             backgroundImage?: (number | null) | Media;
             /**
              * Dùng khi chưa upload ảnh.
@@ -588,13 +599,13 @@ export interface Page {
               | {
                   label: string;
                   value: 'electrical-automation' | 'digitalization' | 'industrial-services' | 'measurement';
-                  id?: string | null;
-                }[]
-              | null;
-            industryFilters?:
-              | {
-                  label: string;
-                  value: string;
+                  industryFilters?:
+                    | {
+                        label: string;
+                        value: string;
+                        id?: string | null;
+                      }[]
+                    | null;
                   id?: string | null;
                 }[]
               | null;
@@ -770,6 +781,27 @@ export interface Page {
             id?: string | null;
             blockName?: string | null;
             blockType: 'brandLogos';
+          }
+        | {
+            title?: string | null;
+            content: {
+              root: {
+                type: string;
+                children: {
+                  type: any;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
+                version: number;
+              };
+              [k: string]: unknown;
+            };
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'richContent';
           }
       )[]
     | null;
@@ -1068,7 +1100,7 @@ export interface Product {
 export interface Partner {
   id: number;
   name: string;
-  logo: number | Media;
+  logo?: (number | null) | Media;
   website?: string | null;
   order?: number | null;
   updatedAt: string;
@@ -1366,7 +1398,15 @@ export interface PagesSelect<T extends boolean = true> {
           | T
           | {
               title?: T;
+              breadcrumbs?:
+                | T
+                | {
+                    label?: T;
+                    href?: T;
+                    id?: T;
+                  };
               breadcrumbLabel?: T;
+              height?: T;
               backgroundImage?: T;
               backgroundImageURL?: T;
               id?: T;
@@ -1617,13 +1657,13 @@ export interface PagesSelect<T extends boolean = true> {
                 | {
                     label?: T;
                     value?: T;
-                    id?: T;
-                  };
-              industryFilters?:
-                | T
-                | {
-                    label?: T;
-                    value?: T;
+                    industryFilters?:
+                      | T
+                      | {
+                          label?: T;
+                          value?: T;
+                          id?: T;
+                        };
                     id?: T;
                   };
               id?: T;
@@ -1759,6 +1799,14 @@ export interface PagesSelect<T extends boolean = true> {
                     name?: T;
                     id?: T;
                   };
+              id?: T;
+              blockName?: T;
+            };
+        richContent?:
+          | T
+          | {
+              title?: T;
+              content?: T;
               id?: T;
               blockName?: T;
             };

@@ -50,6 +50,12 @@ export default buildConfig({
         media: {
           adapter: cloudinaryAdapter(),
           disableLocalStorage: true,
+          generateFileURL: ({ filename }) => {
+            const isVideo = /\.(mp4|webm|mov|avi|mkv|ogg)$/i.test(filename)
+            const publicId = `media/${filename.replace(/\.[^/.]+$/, '')}`
+            const resourceType = isVideo ? 'video' : 'image'
+            return `https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/${resourceType}/upload/${publicId}`
+          },
         },
       },
     }),
