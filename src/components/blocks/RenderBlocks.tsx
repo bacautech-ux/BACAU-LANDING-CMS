@@ -85,15 +85,20 @@ function renderBlock(block: Record<string, unknown>, locale: string, index: numb
     case 'pageHero': {
       const bg = getMediaURL(block.backgroundImage) ?? (block.backgroundImageURL as string | undefined)
       const title = (block.title as string) ?? ''
+      const cmsBreadcrumbs = block.breadcrumbs as { label?: string | null; href?: string | null }[] | null | undefined
+      const breadcrumbs = cmsBreadcrumbs && cmsBreadcrumbs.length > 0
+        ? cmsBreadcrumbs.map((b) => ({ label: b.label ?? '', href: b.href ?? undefined }))
+        : [
+            { label: 'Trang chủ', href: `/${locale}` },
+            { label: (block.breadcrumbLabel as string) ?? title },
+          ]
       return (
         <PageHero
           key={index}
           title={title}
           backgroundImage={bg}
-          breadcrumbs={[
-            { label: 'Trang chủ', href: `/${locale}` },
-            { label: (block.breadcrumbLabel as string) ?? title },
-          ]}
+          breadcrumbs={breadcrumbs}
+          height={block.height as string | null | undefined}
         />
       )
     }

@@ -7,16 +7,25 @@ interface BreadcrumbItem {
   href?: string
 }
 
+const heightClass: Record<string, string> = {
+  sm: 'h-[120px] md:h-[140px] xl:h-[160px]',
+  md: 'h-[160px] md:h-[180px] xl:h-[200px]',
+  lg: 'h-[220px] md:h-[250px] xl:h-[280px]',
+  xl: 'h-[280px] md:h-[320px] xl:h-[360px]',
+}
+
 interface PageHeroProps {
   title: string
   backgroundImage?: string
   breadcrumbs?: BreadcrumbItem[]
+  height?: string | null
 }
 
-export function PageHero({ title, backgroundImage, breadcrumbs }: PageHeroProps) {
+export function PageHero({ title, backgroundImage, breadcrumbs, height }: PageHeroProps) {
+  const hClass = heightClass[height ?? 'md'] ?? heightClass['md']
   return (
     <section
-      className="relative flex h-[180px] flex-col justify-end overflow-hidden px-4 pb-5 md:h-[200px] md:px-6 md:pb-6 xl:h-[220px] xl:px-[60px] xl:pb-[30px]"
+      className={`relative flex flex-col justify-end overflow-hidden px-4 pb-5 md:px-6 md:pb-6 xl:px-[60px] xl:pb-[30px] ${hClass}`}
     >
       {backgroundImage && (
         <div className="absolute inset-0 z-0">
