@@ -43,14 +43,14 @@ export function CTABanner({
       <div className="flex w-full flex-col items-stretch gap-3 sm:w-auto sm:flex-row sm:items-center md:gap-4">
         <Link
           href={`/${locale}${primaryCTAHref}`}
-          className="flex items-center justify-center gap-2.5 rounded-md px-8 py-4 text-[15px] font-bold text-white"
+          className="btn-press flex items-center justify-center gap-2.5 rounded-md px-8 py-4 text-[15px] font-bold text-white transition-all duration-300 hover:-translate-y-0.5 hover:shadow-2xl"
           style={{ background: '#B92C32', boxShadow: '0 4px 24px #B92C3255' }}
         >
-          {primaryCTALabel} <span>→</span>
+          {primaryCTALabel} <span className="transition-transform duration-200 group-hover:translate-x-1">→</span>
         </Link>
         <Link
           href={`/${locale}${secondaryCTAHref}`}
-          className="flex items-center justify-center rounded-md border px-8 py-4 text-[15px] font-semibold text-white"
+          className="btn-press flex items-center justify-center rounded-md border px-8 py-4 text-[15px] font-semibold text-white transition-all duration-300 hover:bg-white/15"
           style={{ background: '#FFFFFF10', borderColor: '#FFFFFF30' }}
         >
           {secondaryCTALabel}

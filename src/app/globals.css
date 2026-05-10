@@ -59,4 +59,92 @@
       padding-inline: 2.5rem;
     }
   }
+
+  /* Card hover lift — subtle -4px rise with shadow */
+  .card-hover {
+    transition: transform 0.3s cubic-bezier(0.33, 1, 0.68, 1),
+                box-shadow 0.3s cubic-bezier(0.33, 1, 0.68, 1);
+  }
+  .card-hover:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Image zoom on hover — apply to parent with group */
+  .img-zoom {
+    transition: transform 0.5s cubic-bezier(0.33, 1, 0.68, 1);
+  }
+  .group:hover .img-zoom {
+    transform: scale(1.05);
+  }
+
+  /* Button press feedback */
+  .btn-press {
+    transition: transform 0.15s ease, box-shadow 0.3s ease;
+  }
+  .btn-press:active {
+    transform: scale(0.97);
+  }
+
+  /* Underline grow — for nav links */
+  .link-underline {
+    position: relative;
+  }
+  .link-underline::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 0;
+    height: 2px;
+    background: var(--color-primary-red);
+    transition: width 0.3s cubic-bezier(0.33, 1, 0.68, 1),
+                left 0.3s cubic-bezier(0.33, 1, 0.68, 1);
+  }
+  .link-underline:hover::after {
+    width: 100%;
+    left: 0;
+  }
+
+  /* Dropdown fade in */
+  .dropdown-enter {
+    opacity: 0;
+    transform: translateY(-4px);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    pointer-events: none;
+  }
+  .group:hover .dropdown-enter {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+
+  /* Logo/brand hover glow */
+  .brand-hover {
+    transition: opacity 0.3s ease, filter 0.3s ease;
+  }
+  .brand-hover:hover {
+    opacity: 0.7 !important;
+    filter: brightness(1.1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card-hover,
+  .img-zoom,
+  .btn-press,
+  .link-underline::after,
+  .dropdown-enter,
+  .brand-hover {
+    transition: none !important;
+  }
+  .card-hover:hover {
+    transform: none;
+  }
+  .group:hover .img-zoom {
+    transform: none;
+  }
+  .btn-press:active {
+    transform: none;
+  }
 }

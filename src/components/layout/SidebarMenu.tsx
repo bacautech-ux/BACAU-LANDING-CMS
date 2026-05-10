@@ -69,7 +69,7 @@ export function SidebarMenu({ groups }: SidebarMenuProps) {
                   <Link
                     key={item.href}
                     href={item.href}
-                    className={`w-full text-right text-[15px] transition-colors hover:text-primary-blue hover:font-semibold ${
+                    className={`w-full text-right text-[15px] transition-all duration-200 hover:text-primary-blue hover:font-semibold hover:translate-x-[-4px] ${
                       isActive ? 'text-primary-blue font-semibold' : 'text-text-secondary font-normal'
                     }`}
                   >

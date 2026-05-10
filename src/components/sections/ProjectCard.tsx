@@ -23,7 +23,7 @@ interface ProjectCardProps {
 // Specs: image 200px + title 13px bold + desc 12px + tag blue 11px, border 1px, padding 16
 function ListCard({ project, href }: { project: ProjectCardData; href: string }) {
   return (
-    <Link href={href} className="group flex flex-col border border-border bg-white transition-shadow duration-200 hover:shadow-md">
+    <Link href={href} className="group card-hover flex flex-col border border-border bg-white">
       <div className="relative h-[180px] shrink-0 overflow-hidden md:h-[200px]">
         <Image
           src={project.thumbnail}
@@ -57,7 +57,7 @@ function ListCard({ project, href }: { project: ProjectCardData; href: string })
 // variant="grid" — dùng các nơi khác (cũ)
 function GridCard({ project, href }: { project: ProjectCardData; href: string }) {
   return (
-    <Link href={href} className="group block bg-white overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300">
+    <Link href={href} className="group card-hover block bg-white overflow-hidden shadow-sm">
       <div className="relative aspect-[4/3] overflow-hidden">
         <Image
           src={project.thumbnail}

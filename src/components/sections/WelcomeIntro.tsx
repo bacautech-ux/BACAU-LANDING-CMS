@@ -169,7 +169,7 @@ export function WelcomeIntro({
           <div>
             <Link
               href={ctaHref}
-              className="inline-flex items-center gap-2 px-7 py-3 text-[14px] font-semibold text-white transition-opacity hover:opacity-90"
+              className="btn-press inline-flex items-center gap-2 px-7 py-3 text-[14px] font-semibold text-white transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg"
               style={{ background: '#2b358c', borderBottom: '3px solid #B92C32' }}
             >
               {ctaLabel}

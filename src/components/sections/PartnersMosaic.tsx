@@ -101,16 +101,17 @@ function MosaicImage({
 }) {
   return (
     <div
-      className="relative h-[170px] flex-1 overflow-hidden rounded-lg md:h-full md:min-h-0"
+      className="group relative h-[170px] flex-1 overflow-hidden rounded-lg md:h-full md:min-h-0"
       style={{ boxShadow: '0 2px 12px #00000033' }}
     >
       <Image
         src={getImageSource(item, fallback)}
         alt={item.alt ?? fallback.alt ?? 'Partner image'}
         fill
-        className="object-cover"
+        className="img-zoom object-cover"
         sizes={size}
       />
+      <div className="absolute inset-0 bg-black/0 transition-colors duration-300 group-hover:bg-black/10" />
     </div>
   )
 }

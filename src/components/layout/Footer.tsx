@@ -168,7 +168,7 @@ export async function Footer({ locale }: FooterProps) {
                 }
 
                 const isExternal = /^(https?:|mailto:|tel:)/.test(href)
-                const className = 'text-[13px] transition-colors hover:text-white'
+                const className = 'inline-block text-[13px] transition-all duration-200 hover:text-white hover:translate-x-1'
                 const style = { color: '#94A3B8' }
 
                 return isExternal ? (

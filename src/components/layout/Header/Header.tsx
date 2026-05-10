@@ -165,18 +165,18 @@ export async function Header({ locale }: HeaderProps) {
               <div key={item.href} className="relative group">
                 <Link
                   href={item.href}
-                  className="flex items-center gap-1 px-2 py-2 text-[13px] font-bold text-text-primary transition-colors hover:text-primary-blue xl:px-3 xl:text-[15px]"
+                  className="link-underline flex items-center gap-1 px-2 py-2 text-[13px] font-bold text-text-primary transition-colors hover:text-primary-blue xl:px-3 xl:text-[15px]"
                 >
                   {item.label}
-                  {item.children && <span className="text-text-muted text-xs">▾</span>}
+                  {item.children && <span className="text-text-muted text-xs transition-transform duration-200 group-hover:rotate-180">▾</span>}
                 </Link>
                 {item.children && (
-                  <div className="absolute top-full left-0 hidden group-hover:block min-w-52 bg-white shadow-xl border-t-2 border-primary-red z-50">
+                  <div className="dropdown-enter absolute top-full left-0 min-w-52 bg-white shadow-xl border-t-2 border-primary-red z-50">
                     {item.children.map((child) => (
                       <Link
                         key={child.href}
                         href={child.href}
-                        className="block px-4 py-3 text-sm text-text-primary hover:bg-bg-light hover:text-primary-navy border-b border-border/50 last:border-0 transition-colors"
+                        className="block px-4 py-3 text-sm text-text-primary hover:bg-bg-light hover:text-primary-navy hover:pl-5 border-b border-border/50 last:border-0 transition-all duration-200"
                       >
                         {child.label}
                       </Link>

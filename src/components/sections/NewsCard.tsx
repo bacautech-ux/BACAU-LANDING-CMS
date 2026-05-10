@@ -31,7 +31,7 @@ export function NewsCard({ article, locale, variant = 'vertical' }: NewsCardProp
 
   if (variant === 'horizontal') {
     return (
-      <Link href={href} className="group flex gap-4 bg-white p-4 shadow-sm hover:shadow-md transition-shadow duration-300">
+      <Link href={href} className="group card-hover flex gap-4 bg-white p-4 shadow-sm">
         <div className="relative w-32 md:w-40 shrink-0 aspect-[4/3] overflow-hidden">
           <Image
             src={article.thumbnail}
@@ -53,7 +53,7 @@ export function NewsCard({ article, locale, variant = 'vertical' }: NewsCardProp
   }
 
   return (
-    <Link href={href} className="group block bg-white overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300">
+    <Link href={href} className="group card-hover block bg-white overflow-hidden shadow-sm">
       <div className="relative aspect-[16/9] overflow-hidden">
         <Image
           src={article.thumbnail}

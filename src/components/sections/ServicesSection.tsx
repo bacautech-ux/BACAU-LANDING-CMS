@@ -103,7 +103,7 @@ export function ServicesSection({
         {visibleCards.map((card) => (
           <div
             key={card.title}
-            className="flex flex-col overflow-hidden rounded-lg bg-white md:rounded-xl"
+            className="group card-hover flex flex-col overflow-hidden rounded-lg bg-white md:rounded-xl"
             style={{ boxShadow: '0 4px 20px #0000000D' }}
           >
             {/* Image */}
@@ -112,7 +112,7 @@ export function ServicesSection({
                 src={card.image}
                 alt={card.title}
                 fill
-                className="object-cover"
+                className="img-zoom object-cover"
                 sizes="(max-width: 767px) 100vw, (max-width: 1279px) 33vw, 380px"
               />
             </div>
@@ -128,7 +128,7 @@ export function ServicesSection({
               <div>
                 <Link
                   href={`/${locale}${card.href}`}
-                  className="inline-flex items-center rounded-md bg-primary-navy px-5 py-2.5 text-[12px] font-semibold text-white xl:px-7 xl:py-3 xl:text-[13px]"
+                  className="btn-press inline-flex items-center rounded-md bg-primary-navy px-5 py-2.5 text-[12px] font-semibold text-white transition-colors duration-200 hover:bg-primary-dark xl:px-7 xl:py-3 xl:text-[13px]"
                   style={{ borderBottom: '3px solid #B92C32' }}
                 >
                   {card.buttonLabel}

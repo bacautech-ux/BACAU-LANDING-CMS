@@ -48,13 +48,17 @@ export function ProjectFilterBar({
             <button
               key={p.value}
               onClick={() => { onParentChange(p.value); onSubChange('all') }}
-              className="cursor-pointer transition-colors whitespace-nowrap"
+              className={`cursor-pointer whitespace-nowrap transition-all duration-200 ${
+                isActive
+                  ? ''
+                  : 'hover:bg-primary-blue/10 hover:text-primary-blue'
+              }`}
               style={{
                 padding: '14px 18px',
                 fontSize: 13,
                 fontWeight: isActive ? 700 : 500,
                 color: isActive ? '#ffffff' : '#64748B',
-                background: isActive ? '#2b358c' : 'transparent',
+                background: isActive ? '#2b358c' : undefined,
                 borderBottom: isActive ? '3px solid #B92C32' : '3px solid transparent',
                 marginBottom: -2,
               }}
@@ -73,7 +77,9 @@ export function ProjectFilterBar({
             <React.Fragment key={s.value}>
               <button
                 onClick={() => onSubChange(s.value)}
-                className="cursor-pointer transition-colors"
+                className={`cursor-pointer transition-all duration-200 ${
+                  isActive ? '' : 'hover:text-primary-navy'
+                }`}
                 style={{
                   fontSize: 13,
                   fontWeight: isActive ? 700 : 400,

@@ -214,7 +214,7 @@ export function HeroSection({
             {/* Primary — red with glow shadow */}
             <Link
               href={primaryCTA.href}
-              className="flex items-center gap-2.5 rounded-md text-white font-bold transition-opacity hover:opacity-90"
+              className="btn-press flex items-center gap-2.5 rounded-md text-white font-bold transition-all duration-300 hover:-translate-y-0.5 hover:shadow-2xl"
               style={{
                 fontSize: 15,
                 padding: '16px 40px',
@@ -223,13 +223,13 @@ export function HeroSection({
               }}
             >
               {primaryCTA.label}
-              <span className="text-base">→</span>
+              <span className="text-base transition-transform duration-200">→</span>
             </Link>
 
             {/* Secondary — glass */}
             <Link
               href={secondaryCTA.href}
-              className="flex items-center gap-2.5 rounded-md text-white font-semibold border transition-opacity hover:opacity-90 backdrop-blur-sm"
+              className="btn-press flex items-center gap-2.5 rounded-md text-white font-semibold border transition-all duration-300 hover:bg-white/15 backdrop-blur-sm"
               style={{
                 fontSize: 15,
                 padding: '16px 40px',

@@ -21,7 +21,7 @@ export function ProductCard({ product, locale }: ProductCardProps) {
   const href = `/${locale}/san-pham/${product.slug}`
 
   return (
-    <Link href={href} className="group block bg-white shadow-sm hover:shadow-md transition-shadow duration-300 overflow-hidden">
+    <Link href={href} className="group card-hover block bg-white shadow-sm overflow-hidden">
       <div className="relative aspect-square overflow-hidden bg-gray-50">
         <Image
           src={product.thumbnail}

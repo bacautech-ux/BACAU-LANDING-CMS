@@ -27,6 +27,54 @@ interface FeaturedProjectsClientProps {
   isLight?: boolean
 }
 
+function TabButton({
+  label,
+  isActive,
+  isLight,
+  onClick,
+}: {
+  label: string
+  isActive: boolean
+  isLight?: boolean
+  onClick: () => void
+}) {
+  const [hovered, setHovered] = useState(false)
+
+  let bg: string
+  let color: string
+  let border: string
+  let fontWeight: number
+
+  if (isActive) {
+    bg = '#B92C32'
+    color = '#fff'
+    border = 'none'
+    fontWeight = 600
+  } else if (hovered) {
+    bg = isLight ? '#E5E7EB' : '#FFFFFF33'
+    color = isLight ? '#1F2937' : '#FFFFFF'
+    border = isLight ? '1px solid #9CA3AF' : '1px solid #FFFFFF50'
+    fontWeight = 500
+  } else {
+    bg = isLight ? '#F3F4F6' : '#FFFFFF15'
+    color = isLight ? '#374151' : '#FFFFFFCC'
+    border = isLight ? '1px solid #D1D5DB' : '1px solid #FFFFFF30'
+    fontWeight = 500
+  }
+
+  return (
+    <button
+      onClick={onClick}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      className="btn-press shrink-0 cursor-pointer rounded-full px-4 py-2 text-[12px] transition-all duration-200 md:px-6 md:py-2.5 md:text-[13px]"
+      style={{ background: bg, color, border, fontWeight }}
+    >
+      {label}
+    </button>
+  )
+}
+
 export function FeaturedProjectsClient({
   locale,
   projects,
@@ -43,20 +91,13 @@ export function FeaturedProjectsClient({
       {tabs.length > 0 && (
         <div className="mb-6 flex items-center gap-2 overflow-x-auto pb-1 md:mb-8 md:flex-wrap md:overflow-visible md:pb-0">
           {tabs.map((tab) => (
-            <button
+            <TabButton
               key={tab.value}
+              label={tab.label}
+              isActive={active === tab.value}
+              isLight={isLight}
               onClick={() => setActive(tab.value)}
-              className="shrink-0 cursor-pointer rounded-full px-4 py-2 text-[12px] transition-all md:px-6 md:py-2.5 md:text-[13px]"
-              style={
-                active === tab.value
-                  ? { background: '#B92C32', color: '#fff', fontWeight: 600 }
-                  : isLight
-                    ? { background: '#F3F4F6', color: '#374151', fontWeight: 500, border: '1px solid #D1D5DB' }
-                    : { background: '#FFFFFF15', color: '#FFFFFFCC', fontWeight: 500, border: '1px solid #FFFFFF30' }
-              }
-            >
-              {tab.label}
-            </button>
+            />
           ))}
         </div>
       )}
@@ -74,14 +115,14 @@ function ProjectCard({ project, locale }: { project: FeaturedProjectCard; locale
   return (
     <Link
       href={`/${locale}/chi-tiet-du-an/${project.slug}`}
-      className="relative flex h-[180px] flex-col justify-between overflow-hidden rounded-lg md:h-[197px] md:rounded-xl xl:h-[280px]"
-      style={{ border: '1px solid #FFFFFF20' }}
+      className="group relative flex h-[180px] flex-col justify-between overflow-hidden rounded-lg md:h-[197px] md:rounded-xl xl:h-[280px]"
+      style={{ border: '1px solid #FFFFFF20', transition: 'border-color 0.3s ease' }}
     >
       <Image
         src={project.image}
         alt={project.title}
         fill
-        className="object-cover"
+        className="img-zoom object-cover"
         sizes="(max-width: 767px) 100vw, 50vw"
       />
       <div className="relative z-10 p-3 xl:p-4">

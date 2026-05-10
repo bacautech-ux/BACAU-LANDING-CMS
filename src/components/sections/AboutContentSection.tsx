@@ -164,7 +164,7 @@ function renderCardGrid(section: AboutSection) {
   return (
     <div className={`grid grid-cols-1 gap-4 ${getGridColumns(section.columns)}`}>
       {cards.map((card) => (
-        <div key={`${section.id}-${card.title}`} className="flex flex-col gap-3 rounded-sm bg-bg-light p-5 xl:p-6">
+        <div key={`${section.id}-${card.title}`} className="card-hover flex flex-col gap-3 rounded-sm bg-bg-light p-5 xl:p-6">
           {card.icon ? <span className="text-2xl">{card.icon}</span> : null}
           <p className="text-[28px] font-semibold leading-none text-primary-blue xl:text-[32px]">{card.title}</p>
           {card.subtitle ? <p className="text-[18px] font-semibold text-text-primary">{card.subtitle}</p> : null}
@@ -288,7 +288,7 @@ function renderItemGrid(section: AboutSection) {
           {items.map((item) => (
             <article
               key={`${section.id}-${item.title}`}
-              className="flex h-full flex-col overflow-hidden rounded-sm border border-border bg-white"
+              className="group card-hover flex h-full flex-col overflow-hidden rounded-sm border border-border bg-white"
             >
               {item.image ? (
                 <div className="relative aspect-[4/3]">

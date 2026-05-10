@@ -38,7 +38,7 @@ export function Button({
   ...props
 }: ButtonProps) {
   const base =
-    'inline-flex items-center justify-center gap-2 rounded-sm font-medium transition-colors duration-200 cursor-pointer whitespace-nowrap'
+    'inline-flex items-center justify-center gap-2 rounded-sm font-medium transition-all duration-200 cursor-pointer whitespace-nowrap btn-press'
   const classes = `${base} ${variantClasses[variant]} ${sizeClasses[size]} ${className}`
 
   if (href) {

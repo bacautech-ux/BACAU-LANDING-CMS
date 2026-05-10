@@ -101,13 +101,13 @@ export async function BrandLogos({
       <div className="grid w-full grid-cols-2 items-center justify-items-center gap-x-6 gap-y-4 md:grid-cols-6 md:px-6 xl:px-10">
         {brands.map((brand) => (
           brand.logo ? (
-            <div key={brand.name} className="relative h-7 w-28 opacity-50 md:h-8 md:w-24 xl:w-32">
+            <div key={brand.name} className="brand-hover relative h-7 w-28 opacity-50 md:h-8 md:w-24 xl:w-32">
               <Image src={brand.logo} alt={brand.name} fill className="object-contain" sizes="128px" />
             </div>
           ) : (
             <span
               key={brand.name}
-              className="text-[18px] font-extrabold tracking-[2px] md:text-[18px] xl:text-[22px]"
+              className="brand-hover text-[18px] font-extrabold tracking-[2px] md:text-[18px] xl:text-[22px]"
               style={{ color: '#0F172A', opacity: 0.35 }}
             >
               {brand.name}
