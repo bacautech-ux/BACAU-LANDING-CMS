@@ -12,6 +12,10 @@ export interface SubCategory {
   value: string
 }
 
+export interface ParentCategoryWithSubs extends ParentCategory {
+  industryFilters?: SubCategory[]
+}
+
 interface ProjectFilterBarProps {
   parents: ParentCategory[]
   subs: SubCategory[]

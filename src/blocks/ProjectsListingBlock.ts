@@ -41,15 +41,16 @@ export const ProjectsListingBlock: Block = {
             { label: 'Giải pháp Đo lường', value: 'measurement' },
           ],
         },
-      ],
-    },
-    {
-      name: 'industryFilters',
-      type: 'array',
-      label: 'Filter ngành hàng',
-      fields: [
-        { name: 'label', type: 'text', localized: true, required: true },
-        { name: 'value', type: 'text', required: true },
+        {
+          name: 'industryFilters',
+          type: 'array',
+          label: 'Danh mục con (filter ngành hàng)',
+          dbName: 'subs',
+          fields: [
+            { name: 'label', type: 'text', localized: true, required: true },
+            { name: 'value', type: 'text', required: true },
+          ],
+        },
       ],
     },
   ],

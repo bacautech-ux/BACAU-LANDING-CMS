@@ -2,27 +2,46 @@ import React from 'react'
 import { PageHero } from '@/components/sections/PageHero'
 import { ProjectsPageClient } from '@/components/sections/ProjectsPageClient'
 import { BrandLogos } from '@/components/sections/BrandLogos'
-import type { ParentCategory, SubCategory } from '@/components/sections/ProjectFilterBar'
+import type { ParentCategoryWithSubs } from '@/components/sections/ProjectFilterBar'
 import type { ProjectCardData } from '@/components/sections/ProjectCard'
 
-const parentCategories: ParentCategory[] = [
-  { label: 'GIẢI PHÁP ĐIỆN - TỰ ĐỘNG HÓA', value: 'dien-tu-dong' },
-  { label: 'GIẢI PHÁP SỐ HÓA', value: 'so-hoa' },
-  { label: 'DỊCH VỤ CÔNG NGHIỆP', value: 'dich-vu' },
-  { label: 'GIẢI PHÁP ĐO LƯỜNG CÔNG NGHỆ', value: 'do-luong' },
-]
-
-const subCategories: SubCategory[] = [
-  { label: 'Dầu khí', value: 'dau-khi' },
-  { label: 'Phân bón & Hóa chất', value: 'phan-bon' },
-  { label: 'Điện', value: 'dien' },
-  { label: 'Xi măng & Khai khoáng', value: 'xi-mang' },
-  { label: 'Thép', value: 'thep' },
-  { label: 'Hàng tiêu dùng', value: 'tieu-dung' },
-  { label: 'Thực phẩm & Đồ uống', value: 'thuc-pham' },
-  { label: 'Đường', value: 'duong' },
-  { label: 'Nước & Nước thải', value: 'nuoc' },
-  { label: 'Cảng', value: 'cang' },
+const parentCategories: ParentCategoryWithSubs[] = [
+  {
+    label: 'GIẢI PHÁP ĐIỆN - TỰ ĐỘNG HÓA', value: 'dien-tu-dong',
+    industryFilters: [
+      { label: 'Dầu khí', value: 'dau-khi' },
+      { label: 'Phân bón & Hóa chất', value: 'phan-bon' },
+      { label: 'Xi măng & Khai khoáng', value: 'xi-mang' },
+      { label: 'Thép', value: 'thep' },
+      { label: 'Thực phẩm & Đồ uống', value: 'thuc-pham' },
+      { label: 'Nước & Nước thải', value: 'nuoc' },
+      { label: 'Cảng', value: 'cang' },
+    ],
+  },
+  {
+    label: 'GIẢI PHÁP SỐ HÓA', value: 'so-hoa',
+    industryFilters: [
+      { label: 'Dầu khí', value: 'dau-khi' },
+      { label: 'Thực phẩm & Đồ uống', value: 'thuc-pham' },
+      { label: 'Hàng tiêu dùng', value: 'tieu-dung' },
+    ],
+  },
+  {
+    label: 'DỊCH VỤ CÔNG NGHIỆP', value: 'dich-vu',
+    industryFilters: [
+      { label: 'Dầu khí', value: 'dau-khi' },
+      { label: 'Điện', value: 'dien' },
+      { label: 'Nước & Nước thải', value: 'nuoc' },
+    ],
+  },
+  {
+    label: 'GIẢI PHÁP ĐO LƯỜNG CÔNG NGHỆ', value: 'do-luong',
+    industryFilters: [
+      { label: 'Dầu khí', value: 'dau-khi' },
+      { label: 'Phân bón & Hóa chất', value: 'phan-bon' },
+      { label: 'Thực phẩm & Đồ uống', value: 'thuc-pham' },
+    ],
+  },
 ]
 
 const allProjects: ProjectCardData[] = [
@@ -71,7 +90,6 @@ export function ProjectsTemplate({ locale, heroHeading, heroBgImage, heroBreadcr
         locale={locale}
         projects={allProjects}
         parents={parentCategories}
-        subs={subCategories}
       />
 
       <BrandLogos />

@@ -225,8 +225,7 @@ function renderBlock(block: Record<string, unknown>, locale: string, index: numb
           sourceMode={block.sourceMode as string | null | undefined}
           limit={block.limit as number | null | undefined}
           projects={block.projects}
-          parentCategories={block.parentCategories as { label: string; value: string }[] | undefined}
-          industryFilters={block.industryFilters as { label: string; value: string }[] | undefined}
+          parentCategories={block.parentCategories as { label: string; value: string; industryFilters?: { label: string; value: string }[] }[] | undefined}
         />
       )
     case 'hero': {

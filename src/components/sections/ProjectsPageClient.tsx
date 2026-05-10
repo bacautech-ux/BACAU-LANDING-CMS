@@ -1,20 +1,21 @@
 'use client'
 
 import React, { useState } from 'react'
-import { ProjectFilterBar, ParentCategory, SubCategory } from './ProjectFilterBar'
+import { ProjectFilterBar, SubCategory, ParentCategoryWithSubs } from './ProjectFilterBar'
 import { ProjectCard, ProjectCardData } from './ProjectCard'
 
 interface ProjectsPageClientProps {
   locale: string
   projects: ProjectCardData[]
-  parents: ParentCategory[]
-  subs: SubCategory[]
+  parents: ParentCategoryWithSubs[]
 }
 
 // Grid: 4 cột, padding [40,60], row-gap 32, col-gap 24 (theo design)
-export function ProjectsPageClient({ locale, projects, parents, subs }: ProjectsPageClientProps) {
+export function ProjectsPageClient({ locale, projects, parents }: ProjectsPageClientProps) {
   const [activeParent, setActiveParent] = useState(parents[0]?.value ?? '')
   const [activeSub, setActiveSub] = useState('all')
+
+  const activeSubs: SubCategory[] = parents.find((p) => p.value === activeParent)?.industryFilters ?? []
 
   const filtered = projects.filter((p) => {
     const matchParent = p.category === activeParent
@@ -26,7 +27,7 @@ export function ProjectsPageClient({ locale, projects, parents, subs }: Projects
     <>
       <ProjectFilterBar
         parents={parents}
-        subs={subs}
+        subs={activeSubs}
         activeParent={activeParent}
         activeSub={activeSub}
         onParentChange={setActiveParent}

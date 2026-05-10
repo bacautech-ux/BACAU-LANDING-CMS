@@ -2,7 +2,7 @@ import React from 'react'
 import config from '@payload-config'
 import { getPayload } from 'payload'
 import { ProjectsPageClient } from './ProjectsPageClient'
-import type { ParentCategory, SubCategory } from './ProjectFilterBar'
+import type { SubCategory, ParentCategoryWithSubs } from './ProjectFilterBar'
 import type { ProjectCardData } from './ProjectCard'
 
 interface MediaValue {
@@ -25,18 +25,10 @@ interface ProjectsListingSectionProps {
   sourceMode?: 'latest' | 'manual' | string | null
   limit?: number | null
   projects?: unknown
-  parentCategories?: ParentCategory[]
-  industryFilters?: SubCategory[]
+  parentCategories?: ParentCategoryWithSubs[]
 }
 
-const defaultParentCategories: ParentCategory[] = [
-  { label: 'GIẢI PHÁP ĐIỆN - TỰ ĐỘNG HÓA', value: 'electrical-automation' },
-  { label: 'GIẢI PHÁP SỐ HÓA', value: 'digitalization' },
-  { label: 'DỊCH VỤ CÔNG NGHIỆP', value: 'industrial-services' },
-  { label: 'GIẢI PHÁP ĐO LƯỜNG CÔNG NGHỆ', value: 'measurement' },
-]
-
-const defaultIndustryFilters: SubCategory[] = [
+const allIndustries: SubCategory[] = [
   { label: 'Dầu khí', value: 'oil-gas' },
   { label: 'Phân bón & Hóa chất', value: 'fertilizer-chemical' },
   { label: 'Điện', value: 'power' },
@@ -45,6 +37,13 @@ const defaultIndustryFilters: SubCategory[] = [
   { label: 'Thực phẩm & Đồ uống', value: 'food-beverage' },
   { label: 'Nước & Nước thải', value: 'water' },
   { label: 'Cảng', value: 'port' },
+]
+
+const defaultParentCategories: ParentCategoryWithSubs[] = [
+  { label: 'GIẢI PHÁP ĐIỆN - TỰ ĐỘNG HÓA', value: 'electrical-automation', industryFilters: allIndustries },
+  { label: 'GIẢI PHÁP SỐ HÓA', value: 'digitalization', industryFilters: allIndustries },
+  { label: 'DỊCH VỤ CÔNG NGHIỆP', value: 'industrial-services', industryFilters: allIndustries },
+  { label: 'GIẢI PHÁP ĐO LƯỜNG CÔNG NGHỆ', value: 'measurement', industryFilters: allIndustries },
 ]
 
 const categoryLabels: Record<string, string> = {
@@ -136,7 +135,6 @@ export async function ProjectsListingSection({
   limit = 24,
   projects,
   parentCategories,
-  industryFilters,
 }: ProjectsListingSectionProps) {
   const selectedProjects =
     sourceMode === 'manual' ? normalizeSelectedProjects(projects, locale) : []
@@ -148,7 +146,6 @@ export async function ProjectsListingSection({
       locale={locale}
       projects={visibleProjects}
       parents={parentCategories?.length ? parentCategories : defaultParentCategories}
-      subs={industryFilters?.length ? industryFilters : defaultIndustryFilters}
     />
   )
 }
