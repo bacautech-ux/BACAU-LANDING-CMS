@@ -354,7 +354,9 @@ export interface Page {
                   /**
                    * Chọn layout gần với design của section này để frontend render đúng.
                    */
-                  variant?: ('intro' | 'cards' | 'gallery' | 'itemGrid' | 'splitMedia' | 'documentList') | null;
+                  variant?:
+                    | ('intro' | 'cards' | 'gallery' | 'itemGrid' | 'splitMedia' | 'documentList' | 'tabbedDocuments')
+                    | null;
                   title: string;
                   /**
                    * Dùng cho section có 1 đoạn mô tả ngắn phía trên grid/list.
@@ -380,6 +382,23 @@ export interface Page {
                         imageURL?: string | null;
                         alt?: string | null;
                         caption?: string | null;
+                        id?: string | null;
+                      }[]
+                    | null;
+                  /**
+                   * Mỗi tab là một danh mục (vd: Chứng nhận, Tài liệu). Mỗi tab chứa nhiều file tải về.
+                   */
+                  tabs?:
+                    | {
+                        tabTitle: string;
+                        files?:
+                          | {
+                              title: string;
+                              file?: (number | null) | Media;
+                              fileURL?: string | null;
+                              id?: string | null;
+                            }[]
+                          | null;
                         id?: string | null;
                       }[]
                     | null;
@@ -1392,6 +1411,20 @@ export interface PagesSelect<T extends boolean = true> {
                           imageURL?: T;
                           alt?: T;
                           caption?: T;
+                          id?: T;
+                        };
+                    tabs?:
+                      | T
+                      | {
+                          tabTitle?: T;
+                          files?:
+                            | T
+                            | {
+                                title?: T;
+                                file?: T;
+                                fileURL?: T;
+                                id?: T;
+                              };
                           id?: T;
                         };
                     items?:

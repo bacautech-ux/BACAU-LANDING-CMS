@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { PageWithSidebar } from '@/components/layout/PageWithSidebar'
 import { SidebarMenu, SidebarMenuGroup } from '@/components/layout/SidebarMenu'
 import { ContentSection } from '@/components/ui/ContentSection'
+import { DocumentTabs } from '@/components/ui/DocumentTabs'
 
 interface MediaValue {
   url?: string | null
@@ -36,6 +37,17 @@ export interface AboutParagraph {
   text?: string | null
 }
 
+export interface AboutDocumentFile {
+  title?: string | null
+  file?: { url?: string | null; filename?: string | null } | null
+  fileURL?: string | null
+}
+
+export interface AboutDocumentTab {
+  tabTitle?: string | null
+  files?: AboutDocumentFile[] | null
+}
+
 export interface AboutSection {
   id?: string | null
   variant?: string | null
@@ -46,6 +58,7 @@ export interface AboutSection {
   imagePosition?: 'left' | 'right' | null
   images?: AboutImage[] | null
   items?: AboutItem[] | null
+  tabs?: AboutDocumentTab[] | null
 }
 
 interface AboutContentSectionProps {
@@ -379,6 +392,8 @@ export function AboutSectionContent({ section }: { section: AboutSection }) {
       return renderSplitMedia(section)
     case 'documentList':
       return renderDocumentList(section)
+    case 'tabbedDocuments':
+      return <DocumentTabs tabs={section.tabs ?? []} />
     case 'gallery':
     default:
       return <GallerySection section={section} />

@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
@@ -21,13 +21,29 @@ interface SidebarMenuProps {
 
 export function SidebarMenu({ groups }: SidebarMenuProps) {
   const pathname = usePathname()
+  const [hash, setHash] = useState('')
+
+  useEffect(() => {
+    setHash(window.location.hash)
+    const onHashChange = () => setHash(window.location.hash)
+    window.addEventListener('hashchange', onHashChange)
+    return () => window.removeEventListener('hashchange', onHashChange)
+  }, [])
+
+  function isItemActive(href: string) {
+    const [hrefPath, hrefHash] = href.split('#')
+    if (hrefHash) {
+      return pathname === hrefPath && hash === `#${hrefHash}`
+    }
+    return pathname === href || pathname.startsWith(href + '/')
+  }
 
   return (
     <nav className="flex w-full flex-col rounded-sm bg-transparent lg:w-[340px]">
       {groups.map((group, gi) => {
         const isGroupActive =
           (group.titleHref && pathname === group.titleHref) ||
-          group.items.some((item) => pathname === item.href || pathname.startsWith(item.href + '/'))
+          group.items.some((item) => isItemActive(item.href))
 
         return (
           <React.Fragment key={gi}>
@@ -48,16 +64,14 @@ export function SidebarMenu({ groups }: SidebarMenuProps) {
               </div>
 
               {group.items.map((item) => {
-                const isActive = pathname === item.href || pathname.startsWith(item.href + '/')
+                const isActive = isItemActive(item.href)
                 return (
                   <Link
                     key={item.href}
                     href={item.href}
-                    className="w-full text-right text-[15px] transition-colors"
-                    style={{
-                      color: isActive ? '#2b358c' : '#64748B',
-                      fontWeight: isActive ? 600 : 400,
-                    }}
+                    className={`w-full text-right text-[15px] transition-colors hover:text-primary-blue hover:font-semibold ${
+                      isActive ? 'text-primary-blue font-semibold' : 'text-text-secondary font-normal'
+                    }`}
                   >
                     {item.label}
                   </Link>

@@ -140,6 +140,16 @@ function renderBlock(block: Record<string, unknown>, locale: string, index: numb
                         buttonLabel?: string | null
                       }[]
                     | null
+                  tabs?:
+                    | {
+                        tabTitle?: string | null
+                        files?: {
+                          title?: string | null
+                          file?: { url?: string | null; filename?: string | null } | null
+                          fileURL?: string | null
+                        }[] | null
+                      }[]
+                    | null
                 }[]
               | undefined
           }

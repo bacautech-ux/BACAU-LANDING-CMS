@@ -32,6 +32,9 @@ export function PageTransition() {
       if (!anchor) return
       const href = anchor.getAttribute('href')
       if (!href || !href.startsWith('/') || href === pathname) return
+      // Ignore hash-only navigation (same page anchor)
+      const hrefPath = href.split('#')[0]
+      if (!hrefPath || hrefPath === pathname) return
 
       pending.current = true
       timer.current = setTimeout(() => {

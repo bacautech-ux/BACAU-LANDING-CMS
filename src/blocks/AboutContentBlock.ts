@@ -42,6 +42,7 @@ export const AboutContentBlock: Block = {
             { label: 'Item grid / card list', value: 'itemGrid' },
             { label: 'Split media + text', value: 'splitMedia' },
             { label: 'Danh sách tài liệu', value: 'documentList' },
+            { label: 'Tab chứng nhận & tài liệu', value: 'tabbedDocuments' },
           ],
           admin: {
             description: 'Chọn layout gần với design của section này để frontend render đúng.',
@@ -109,6 +110,28 @@ export const AboutContentBlock: Block = {
             { name: 'imageURL', type: 'text', label: 'URL ảnh fallback' },
             { name: 'alt', type: 'text', localized: true, label: 'Alt text' },
             { name: 'caption', type: 'text', localized: true, label: 'Caption / label' },
+          ],
+        },
+        {
+          name: 'tabs',
+          type: 'array',
+          label: 'Tabs tài liệu',
+          admin: {
+            description: 'Mỗi tab là một danh mục (vd: Chứng nhận, Tài liệu). Mỗi tab chứa nhiều file tải về.',
+            condition: (_, siblingData) => siblingData?.variant === 'tabbedDocuments',
+          },
+          fields: [
+            { name: 'tabTitle', type: 'text', localized: true, required: true, label: 'Tên tab' },
+            {
+              name: 'files',
+              type: 'array',
+              label: 'Danh sách file',
+              fields: [
+                { name: 'title', type: 'text', localized: true, required: true, label: 'Tên hiển thị' },
+                { name: 'file', type: 'upload', relationTo: 'media', label: 'File tải về' },
+                { name: 'fileURL', type: 'text', label: 'URL fallback (nếu không upload)' },
+              ],
+            },
           ],
         },
         {

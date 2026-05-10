@@ -119,8 +119,7 @@ const aboutSidebarByLocale = {
       title: 'Chứng chỉ & Tài liệu',
       titleHref: '/vi/gioi-thieu/chung-chi',
       items: [
-        { label: 'Chứng nhận', href: '/vi/gioi-thieu#chung-nhan' },
-        { label: 'Tài liệu', href: '/vi/gioi-thieu#tai-lieu' },
+        { label: 'Chứng chỉ & Tài liệu', href: '/vi/gioi-thieu#tai-lieu' },
       ],
     },
   ],
@@ -164,8 +163,7 @@ const aboutSidebarByLocale = {
       title: 'Certificates & documents',
       titleHref: '/en/about/documents',
       items: [
-        { label: 'Certificates', href: '/en/about#chung-nhan' },
-        { label: 'Documents', href: '/en/about#tai-lieu' },
+        { label: 'Certificates & Documents', href: '/en/about#tai-lieu' },
       ],
     },
   ],
@@ -452,49 +450,26 @@ const aboutSectionsByLocale = {
       ],
     },
     {
-      id: 'chung-nhan',
-      title: 'CHỨNG NHẬN',
-      variant: 'gallery',
-      columns: '3',
-      body: 'Các chứng nhận và giấy phép hoạt động của Bắc Âu trong lĩnh vực tự động hóa và dịch vụ công nghiệp.',
-      images: [
-        {
-          imageURL:
-            'https://images.unsplash.com/photo-1602629978879-e7ed887988d1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080',
-          alt: 'Chứng nhận 1',
-        },
-        {
-          imageURL:
-            'https://images.unsplash.com/photo-1704584592182-ed995ac89ddb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080',
-          alt: 'Chứng nhận 2',
-        },
-        {
-          imageURL:
-            'https://images.unsplash.com/photo-1624365169806-1517fcb873d7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080',
-          alt: 'Chứng nhận 3',
-        },
-      ],
-    },
-    {
       id: 'tai-lieu',
-      title: 'TÀI LIỆU',
-      variant: 'documentList',
-      body: 'Tải xuống các tài liệu kỹ thuật, catalogue sản phẩm và thông tin dịch vụ của Bắc Âu.',
-      items: [
+      title: 'CHỨNG NHẬN & TÀI LIỆU',
+      variant: 'tabbedDocuments',
+      tabs: [
         {
-          title: 'Company Profile Bắc Âu',
-          subtitle: 'PDF / 12 MB',
-          description: 'Giới thiệu doanh nghiệp, năng lực triển khai và danh mục giải pháp chính.',
+          tabTitle: 'CHỨNG NHẬN',
+          files: [
+            { title: 'CHỨNG CHỈ NĂNG LỰC HOẠT ĐỘNG XÂY DỰNG' },
+            { title: 'CHỨNG NHẬN XƯỞNG SỬA CHỮA FLENDER' },
+            { title: 'CHỨNG NHẬN ĐỐI TÁC CỦA FLENDER 2025' },
+            { title: 'CÁC GIẢI PHÁP TÍCH HỢP CHO TRẠM ĐO MÔI TRƯỜNG' },
+          ],
         },
         {
-          title: 'Catalogue thiết bị công nghiệp',
-          subtitle: 'PDF / 24 MB',
-          description: 'Tổng hợp các dòng sản phẩm, thương hiệu và thông số kỹ thuật tiêu biểu.',
-        },
-        {
-          title: 'Tài liệu dịch vụ kỹ thuật',
-          subtitle: 'PDF / 8 MB',
-          description: 'Mô tả phạm vi dịch vụ: thiết kế, thi công, chạy thử, bảo trì và đào tạo.',
+          tabTitle: 'TÀI LIỆU',
+          files: [
+            { title: 'SITRAM REG TRANSFORMATING REGENERATION INTO SYSTEM RELIABILITY' },
+            { title: 'XHQ GIỚI THIỆU' },
+            { title: 'COMPANY PROFILE BẮC ÂU' },
+          ],
         },
       ],
     },
@@ -763,46 +738,26 @@ const aboutSectionsByLocale = {
       ],
     },
     {
-      id: 'chung-nhan',
-      title: 'CERTIFICATES',
-      variant: 'gallery',
-      columns: '3',
-      body: 'Licenses and certificates supporting Bac Au in industrial automation and service delivery.',
-      images: [
-        {
-          imageURL:
-            'https://images.unsplash.com/photo-1602629978879-e7ed887988d1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080',
-        },
-        {
-          imageURL:
-            'https://images.unsplash.com/photo-1704584592182-ed995ac89ddb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080',
-        },
-        {
-          imageURL:
-            'https://images.unsplash.com/photo-1624365169806-1517fcb873d7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080',
-        },
-      ],
-    },
-    {
       id: 'tai-lieu',
-      title: 'DOCUMENTS',
-      variant: 'documentList',
-      body: 'Download technical documents, product catalogues and service information from Bac Au.',
-      items: [
+      title: 'CERTIFICATES & DOCUMENTS',
+      variant: 'tabbedDocuments',
+      tabs: [
         {
-          title: 'Bac Au company profile',
-          subtitle: 'PDF / 12 MB',
-          description: 'Overview of company capabilities, project delivery and core solutions.',
+          tabTitle: 'CERTIFICATES',
+          files: [
+            { title: 'CONSTRUCTION ACTIVITY CAPABILITY CERTIFICATE' },
+            { title: 'FLENDER REPAIR WORKSHOP CERTIFICATE' },
+            { title: 'FLENDER PARTNER CERTIFICATE 2025' },
+            { title: 'INTEGRATED SOLUTIONS FOR ENVIRONMENTAL MEASUREMENT STATIONS' },
+          ],
         },
         {
-          title: 'Industrial products catalogue',
-          subtitle: 'PDF / 24 MB',
-          description: 'Selected product lines, brands and technical information.',
-        },
-        {
-          title: 'Technical services brochure',
-          subtitle: 'PDF / 8 MB',
-          description: 'Scope of services including design, installation, commissioning and maintenance.',
+          tabTitle: 'DOCUMENTS',
+          files: [
+            { title: 'SITRAM REG TRANSFORMATING REGENERATION INTO SYSTEM RELIABILITY' },
+            { title: 'XHQ INTRODUCTION' },
+            { title: 'BAC AU COMPANY PROFILE' },
+          ],
         },
       ],
     },
