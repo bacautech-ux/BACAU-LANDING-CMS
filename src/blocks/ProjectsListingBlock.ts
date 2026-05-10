@@ -45,7 +45,7 @@ export const ProjectsListingBlock: Block = {
           name: 'industryFilters',
           type: 'array',
           label: 'Danh mục con (filter ngành hàng)',
-          dbName: 'subs',
+          dbName: 'pbpl_pc_industry_filters',
           fields: [
             { name: 'label', type: 'text', localized: true, required: true },
             { name: 'value', type: 'text', required: true },

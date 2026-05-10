@@ -1,75 +1,73 @@
 -- Migration 004: Nested sub-categories inside parentCategories for ProjectsListingBlock
 -- Run AFTER deploying code changes (industryFilters moved inside parentCategories).
 --
+-- Note: dbName: 'pbpl_pc_industry_filters' is used in the block config so Payload
+--       looks for tables named exactly: pbpl_pc_industry_filters and pbpl_pc_industry_filters_locales
+--
 -- Changes:
---   1. Create new nested table: pages_blocks_projects_listing_parent_categories_subs
---      (dbName: 'subs' to stay under Postgres 63-char identifier limit)
---   2. Create its locales table for the localized `label` field
+--   1. Create pbpl_pc_industry_filters — nested sub-categories per parent tab
+--   2. Create pbpl_pc_industry_filters_locales — localized label field
 --   3. Drop old flat industry_filters tables (no longer referenced by Payload)
 
--- ─── 1. Sequence for the locales table id (short name, avoids 63-char limit) ──
+-- ─── 1. Sequence for locales id ──────────────────────────────────────────────
 
-CREATE SEQUENCE IF NOT EXISTS pbpl_pc_subs_loc_id_seq;
+CREATE SEQUENCE IF NOT EXISTS pbpl_pc_ind_filters_locales_id_seq;
 
--- ─── 2. New nested subs table (mirrors industry_filters structure but
---        _parent_id references parent_categories.id, not the block root) ────────
+-- ─── 2. Main subs table ───────────────────────────────────────────────────────
+-- _parent_id references pages_blocks_projects_listing_parent_categories.id
 
-CREATE TABLE IF NOT EXISTS public.pages_blocks_projects_listing_parent_categories_subs (
-    _order  integer          NOT NULL,
+CREATE TABLE IF NOT EXISTS public.pbpl_pc_industry_filters (
+    _order     integer          NOT NULL,
     _parent_id character varying NOT NULL,
-    id      character varying NOT NULL,
-    value   character varying NOT NULL
+    id         character varying NOT NULL,
+    value      character varying NOT NULL
 );
 
 -- ─── 3. Locales table for the label field ────────────────────────────────────
 
-CREATE TABLE IF NOT EXISTS public.pages_blocks_projects_listing_parent_categories_subs_locales (
+CREATE TABLE IF NOT EXISTS public.pbpl_pc_industry_filters_locales (
     label      character varying NOT NULL,
-    id         integer           NOT NULL DEFAULT nextval('pbpl_pc_subs_loc_id_seq'),
+    id         integer           NOT NULL DEFAULT nextval('pbpl_pc_ind_filters_locales_id_seq'),
     _locale    public._locales   NOT NULL,
     _parent_id character varying NOT NULL
 );
 
-ALTER SEQUENCE pbpl_pc_subs_loc_id_seq
-    OWNED BY public.pages_blocks_projects_listing_parent_categories_subs_locales.id;
+ALTER SEQUENCE pbpl_pc_ind_filters_locales_id_seq
+    OWNED BY public.pbpl_pc_industry_filters_locales.id;
 
 -- ─── 4. Primary keys ─────────────────────────────────────────────────────────
 
-ALTER TABLE public.pages_blocks_projects_listing_parent_categories_subs
-    ADD CONSTRAINT pages_blocks_projects_listing_parent_categories_subs_pkey
-    PRIMARY KEY (id);
+ALTER TABLE public.pbpl_pc_industry_filters
+    ADD CONSTRAINT pbpl_pc_industry_filters_pkey PRIMARY KEY (id);
 
-ALTER TABLE public.pages_blocks_projects_listing_parent_categories_subs_locales
-    ADD CONSTRAINT pbpl_pc_subs_locales_pkey
-    PRIMARY KEY (id);
+ALTER TABLE public.pbpl_pc_industry_filters_locales
+    ADD CONSTRAINT pbpl_pc_industry_filters_locales_pkey PRIMARY KEY (id);
 
--- ─── 5. Unique constraint on locales (one locale per row) ────────────────────
+-- ─── 5. Unique constraint on locales ─────────────────────────────────────────
 
-CREATE UNIQUE INDEX IF NOT EXISTS pbpl_pc_subs_locales_locale_parent_idx
-    ON public.pages_blocks_projects_listing_parent_categories_subs_locales (_locale, _parent_id);
+CREATE UNIQUE INDEX IF NOT EXISTS pbpl_pc_ind_filters_locales_locale_parent_idx
+    ON public.pbpl_pc_industry_filters_locales (_locale, _parent_id);
 
--- ─── 6. Indexes on subs table ────────────────────────────────────────────────
+-- ─── 6. Indexes ───────────────────────────────────────────────────────────────
 
-CREATE INDEX IF NOT EXISTS pbpl_pc_subs_order_idx
-    ON public.pages_blocks_projects_listing_parent_categories_subs (_order);
+CREATE INDEX IF NOT EXISTS pbpl_pc_industry_filters_order_idx
+    ON public.pbpl_pc_industry_filters (_order);
 
-CREATE INDEX IF NOT EXISTS pbpl_pc_subs_parent_id_idx
-    ON public.pages_blocks_projects_listing_parent_categories_subs (_parent_id);
+CREATE INDEX IF NOT EXISTS pbpl_pc_industry_filters_parent_id_idx
+    ON public.pbpl_pc_industry_filters (_parent_id);
 
 -- ─── 7. Foreign keys ─────────────────────────────────────────────────────────
 
--- subs._parent_id → parent_categories.id
-ALTER TABLE public.pages_blocks_projects_listing_parent_categories_subs
-    ADD CONSTRAINT pbpl_pc_subs_parent_id_fk
+ALTER TABLE public.pbpl_pc_industry_filters
+    ADD CONSTRAINT pbpl_pc_industry_filters_parent_id_fk
     FOREIGN KEY (_parent_id)
     REFERENCES public.pages_blocks_projects_listing_parent_categories(id)
     ON DELETE CASCADE;
 
--- subs_locales._parent_id → subs.id
-ALTER TABLE public.pages_blocks_projects_listing_parent_categories_subs_locales
-    ADD CONSTRAINT pbpl_pc_subs_locales_parent_id_fk
+ALTER TABLE public.pbpl_pc_industry_filters_locales
+    ADD CONSTRAINT pbpl_pc_industry_filters_locales_parent_id_fk
     FOREIGN KEY (_parent_id)
-    REFERENCES public.pages_blocks_projects_listing_parent_categories_subs(id)
+    REFERENCES public.pbpl_pc_industry_filters(id)
     ON DELETE CASCADE;
 
 -- ─── 8. Drop old flat industry_filters tables (no longer used) ───────────────
