@@ -12,6 +12,7 @@ import { ProductsSection } from '@/components/sections/ProductsSection'
 import { ProjectsListingSection } from '@/components/sections/ProjectsListingSection'
 import { ServicesSection } from '@/components/sections/ServicesSection'
 import { WelcomeIntro } from '@/components/sections/WelcomeIntro'
+import { RichContentSection } from '@/components/sections/RichContentSection'
 // V2 Modern Split
 import { HeroV2 } from '@/components/home-v2-modern-split/HeroV2'
 import { ServicesBentoV2 } from '@/components/home-v2-modern-split/ServicesBentoV2'
@@ -500,6 +501,14 @@ function renderBlock(block: Record<string, unknown>, locale: string, index: numb
           gradientMiddle={block.gradientMiddle as string | undefined}
           gradientTo={block.gradientTo as string | undefined}
           accentColor={block.accentColor as string | undefined}
+        />
+      )
+    case 'richContent':
+      return (
+        <RichContentSection
+          key={index}
+          title={block.title as string | null | undefined}
+          content={block.content as import('@payloadcms/richtext-lexical/lexical').SerializedEditorState | null | undefined}
         />
       )
     case 'brandLogos':

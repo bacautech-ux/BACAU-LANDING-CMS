@@ -17,6 +17,7 @@ export { CTABannerBlock } from './CTABannerBlock'
 export { BrandLogosBlock } from './BrandLogosBlock'
 export { HeroBannerBlock } from './HeroBannerBlock'
 export { WelcomeIntroBlock } from './WelcomeIntroBlock'
+export { RichContentBlock } from './RichContentBlock'
 
 import { HeroBlock } from './HeroBlock'
 import { HeroBannerBlock } from './HeroBannerBlock'
@@ -37,6 +38,7 @@ import { PartnersBlock } from './PartnersBlock'
 import { ProductsBlock } from './ProductsBlock'
 import { CTABannerBlock } from './CTABannerBlock'
 import { BrandLogosBlock } from './BrandLogosBlock'
+import { RichContentBlock } from './RichContentBlock'
 
 export const PageLayoutBlocks = [
   HeroBlock,
@@ -58,4 +60,5 @@ export const PageLayoutBlocks = [
   ProductsBlock,
   CTABannerBlock,
   BrandLogosBlock,
+  RichContentBlock,
 ]
