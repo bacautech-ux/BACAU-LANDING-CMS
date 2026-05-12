@@ -1,4 +1,5 @@
 import React from 'react'
+import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import config from '@payload-config'
 import { getPayload } from 'payload'
@@ -9,6 +10,52 @@ import { RichText } from '@payloadcms/richtext-lexical/react'
 import type { SerializedEditorState } from '@payloadcms/richtext-lexical/lexical'
 
 export const revalidate = 3600
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string; slug: string }>
+}): Promise<Metadata> {
+  const { locale, slug } = await params
+  const payload = await getPayload({ config })
+  const { docs } = await payload.find({
+    collection: 'products',
+    where: { slug: { equals: slug } },
+    depth: 1,
+    limit: 1,
+  })
+  const product = docs[0]
+  if (!product) return {}
+
+  const name = locale === 'en'
+    ? ((product.name as { vi?: string; en?: string })?.en || (product.name as { vi?: string })?.vi || '')
+    : ((product.name as { vi?: string })?.vi || '')
+  const desc = locale === 'en'
+    ? ((product.shortDescription as { vi?: string; en?: string })?.en || (product.shortDescription as { vi?: string })?.vi || '')
+    : ((product.shortDescription as { vi?: string })?.vi || '')
+  const thumb = product.thumbnail && typeof product.thumbnail === 'object'
+    ? (product.thumbnail as { url?: string }).url
+    : undefined
+  const title = `${name} | BắcÂu ESTEC`
+
+  return {
+    title,
+    description: desc || undefined,
+    openGraph: {
+      title,
+      description: desc || undefined,
+      ...(thumb ? { images: [{ url: thumb, width: 1200, height: 630 }] } : {}),
+      locale: locale === 'en' ? 'en_US' : 'vi_VN',
+      type: 'article',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description: desc || undefined,
+      ...(thumb ? { images: [thumb] } : {}),
+    },
+  }
+}
 
 const locales = ['vi', 'en']
 

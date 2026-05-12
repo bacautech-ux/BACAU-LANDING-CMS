@@ -1,4 +1,5 @@
 import React from 'react'
+import type { Metadata } from 'next'
 import Image from 'next/image'
 import { notFound } from 'next/navigation'
 import config from '@payload-config'
@@ -7,6 +8,54 @@ import { setRequestLocale } from 'next-intl/server'
 import { BreadcrumbBar } from '@/components/sections/PageHero'
 
 export const revalidate = 3600
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string; slug: string }>
+}): Promise<Metadata> {
+  const { locale, slug } = await params
+  const payload = await getPayload({ config })
+  const { docs } = await payload.find({
+    collection: 'projects',
+    where: { slug: { equals: slug } },
+    depth: 1,
+    locale: locale === 'en' ? 'en' : 'vi',
+    fallbackLocale: 'vi',
+    limit: 1,
+  })
+  const project = docs[0]
+  if (!project) return {}
+
+  const title = (project.title as unknown as string) || ''
+  const summary = (project.summary as unknown as string) || ''
+  const thumb = project.thumbnail && typeof project.thumbnail === 'object'
+    ? (project.thumbnail as { url?: string }).url
+    : undefined
+  const heroImg = project.detailHeroImage && typeof project.detailHeroImage === 'object'
+    ? (project.detailHeroImage as { url?: string }).url
+    : undefined
+  const ogImage = heroImg || thumb
+  const pageTitle = `${title} | BắcÂu ESTEC`
+
+  return {
+    title: pageTitle,
+    description: summary || undefined,
+    openGraph: {
+      title: pageTitle,
+      description: summary || undefined,
+      ...(ogImage ? { images: [{ url: ogImage, width: 1200, height: 630 }] } : {}),
+      locale: locale === 'en' ? 'en_US' : 'vi_VN',
+      type: 'article',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: pageTitle,
+      description: summary || undefined,
+      ...(ogImage ? { images: [ogImage] } : {}),
+    },
+  }
+}
 import { ContentSection } from '@/components/ui/ContentSection'
 
 const locales = ['vi', 'en']

@@ -1,10 +1,57 @@
 import React from 'react'
+import type { Metadata } from 'next'
 import config from '@payload-config'
 import { getPayload } from 'payload'
 import { setRequestLocale } from 'next-intl/server'
 import { RenderBlocks } from '@/components/blocks/RenderBlocks'
 
 export const revalidate = 3600
+
+interface MediaValue { url?: string | null }
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>
+}): Promise<Metadata> {
+  const { locale } = await params
+  const payload = await getPayload({ config })
+  const { docs } = await payload.find({
+    collection: 'pages',
+    where: { slug: { equals: 'home' } },
+    depth: 1,
+    locale: locale === 'en' ? 'en' : 'vi',
+    fallbackLocale: 'vi',
+    limit: 1,
+  })
+  const page = docs[0]
+  const seo = page?.seo as { title?: string | null; description?: string | null; image?: unknown } | undefined
+  const title = seo?.title || (locale === 'en'
+    ? 'ESTEC BắcÂu – Industrial Automation Solutions'
+    : 'BắcÂu – Giải pháp Tự động hóa Công nghiệp')
+  const description = seo?.description || (locale === 'en'
+    ? 'Leading provider of industrial automation, digitalization and energy management solutions in Vietnam.'
+    : 'Nhà cung cấp giải pháp hàng đầu trong lĩnh vực Tự Động Hóa và Số hóa công nghiệp tại Việt Nam.')
+  const ogImage = (seo?.image && typeof seo.image === 'object') ? (seo.image as MediaValue).url : undefined
+
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      ...(ogImage ? { images: [{ url: ogImage, width: 1200, height: 630 }] } : {}),
+      locale: locale === 'en' ? 'en_US' : 'vi_VN',
+      type: 'website',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      ...(ogImage ? { images: [ogImage] } : {}),
+    },
+  }
+}
 import { HeroSection } from '@/components/sections/HeroSection'
 import { ServicesSection } from '@/components/sections/ServicesSection'
 import { NewsSection } from '@/components/sections/NewsSection'

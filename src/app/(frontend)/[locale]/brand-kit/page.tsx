@@ -1,4 +1,10 @@
 import React from 'react'
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Brand Kit | BắcÂu ESTEC',
+  description: 'BắcÂu ESTEC brand guidelines, colors, typography and logo usage.',
+}
 
 // ─── Color Swatch Card ──────────────────────────────────────────────
 function ColorCard({
