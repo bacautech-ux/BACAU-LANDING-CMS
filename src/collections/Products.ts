@@ -87,5 +87,15 @@ export const Products: CollectionConfig = {
     },
     { name: 'brand', type: 'text', label: 'Thương hiệu' },
     { name: 'featured', type: 'checkbox', defaultValue: false },
+    {
+      name: 'seo',
+      type: 'group',
+      label: 'SEO',
+      fields: [
+        { name: 'title', type: 'text', label: 'SEO title' },
+        { name: 'description', type: 'textarea', label: 'SEO description' },
+        { name: 'image', type: 'upload', relationTo: 'media', label: 'Ảnh chia sẻ (OG Image)' },
+      ],
+    },
   ],
 }

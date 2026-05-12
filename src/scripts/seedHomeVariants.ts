@@ -385,7 +385,7 @@ function layoutV5() {
       blockType: 'featuredProjects',
       variant: 'list',
       title: 'DỰ ÁN TIÊU BIỂU',
-      subtitle: 'Những dự án tiêu biểu đã được BắcÂu triển khai thành công trên toàn quốc',
+      subtitle: 'Những dự án tiêu biểu đã được Bắc Âu triển khai thành công trên toàn quốc',
       sourceMode: 'latest',
       count: 4,
       viewAll: { label: 'Xem tất cả →', href: '/du-an-tham-khao' },

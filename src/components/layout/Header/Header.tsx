@@ -121,7 +121,7 @@ export async function Header({ locale }: HeaderProps) {
   )
   const phone = header?.phone ?? '(028) 3636 9936'
   const email = header?.email ?? 'info@bacau.com.vn'
-  const logoText = header?.logoText ?? 'BắcÂu'
+  const logoText = header?.logoText ?? 'Bắc Âu'
   const logoImage = getLogoImageData(header)
 
   return (

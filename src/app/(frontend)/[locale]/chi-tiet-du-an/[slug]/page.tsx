@@ -35,15 +35,18 @@ export async function generateMetadata({
   const heroImg = project.detailHeroImage && typeof project.detailHeroImage === 'object'
     ? (project.detailHeroImage as { url?: string }).url
     : undefined
-  const ogImage = heroImg || thumb
-  const pageTitle = `${title} | BắcÂu ESTEC`
+  const seo = project.seo as { title?: string | null; description?: string | null; image?: unknown } | undefined
+  const seoImage = seo?.image && typeof seo.image === 'object' ? (seo.image as { url?: string }).url : undefined
+  const ogImage = seoImage || heroImg || thumb
+  const pageTitle = seo?.title || `${title} | Bắc Âu`
+  const pageDesc = seo?.description || summary
 
   return {
     title: pageTitle,
-    description: summary || undefined,
+    description: pageDesc || undefined,
     openGraph: {
       title: pageTitle,
-      description: summary || undefined,
+      description: pageDesc || undefined,
       ...(ogImage ? { images: [{ url: ogImage, width: 1200, height: 630 }] } : {}),
       locale: locale === 'en' ? 'en_US' : 'vi_VN',
       type: 'article',
@@ -51,7 +54,7 @@ export async function generateMetadata({
     twitter: {
       card: 'summary_large_image',
       title: pageTitle,
-      description: summary || undefined,
+      description: pageDesc || undefined,
       ...(ogImage ? { images: [ogImage] } : {}),
     },
   }

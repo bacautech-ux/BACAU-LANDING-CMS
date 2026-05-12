@@ -193,5 +193,15 @@ export const Projects: CollectionConfig = {
       fields: [{ name: 'image', type: 'upload', relationTo: 'media' }],
     },
     { name: 'featured', type: 'checkbox', label: 'Dự án tiêu biểu', defaultValue: false },
+    {
+      name: 'seo',
+      type: 'group',
+      label: 'SEO',
+      fields: [
+        { name: 'title', type: 'text', localized: true, label: 'SEO title' },
+        { name: 'description', type: 'textarea', localized: true, label: 'SEO description' },
+        { name: 'image', type: 'upload', relationTo: 'media', label: 'Ảnh chia sẻ (OG Image)' },
+      ],
+    },
   ],
 }

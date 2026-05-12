@@ -16,7 +16,7 @@ interface Props {
 export function AboutTemplate({ locale, heroHeading, heroBgImage, heroBreadcrumbLabel }: Props) {
   const sidebarGroups: SidebarMenuGroup[] = [
     {
-      title: 'Về BắcÂu',
+      title: 'Về Bắc Âu',
       titleHref: `/${locale}/gioi-thieu`,
       items: [
         { label: 'Giới thiệu', href: `/${locale}/gioi-thieu#gioi-thieu` },
@@ -84,10 +84,10 @@ export function AboutTemplate({ locale, heroHeading, heroBgImage, heroBreadcrumb
               </p>
               <div className="grid grid-cols-2 gap-4">
                 <div className="relative aspect-[4/3] overflow-hidden rounded-sm">
-                  <Image src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=700" alt="BắcÂu office" fill className="object-cover" sizes="40vw" />
+                  <Image src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=700" alt="Bắc Âu office" fill className="object-cover" sizes="40vw" />
                 </div>
                 <div className="relative aspect-[4/3] overflow-hidden rounded-sm">
-                  <Image src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=700" alt="BắcÂu team" fill className="object-cover" sizes="40vw" />
+                  <Image src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=700" alt="Bắc Âu team" fill className="object-cover" sizes="40vw" />
                 </div>
               </div>
             </div>
@@ -302,7 +302,7 @@ export function AboutTemplate({ locale, heroHeading, heroBgImage, heroBreadcrumb
               </p>
               <div className="flex flex-col gap-3">
                 {[
-                  'Catalogue Sản phẩm BắcÂu 2026',
+                  'Catalogue Sản phẩm Bắc Âu 2026',
                   'Hồ sơ năng lực công ty',
                   'Danh mục giải pháp tự động hóa',
                   'Quy trình & Tiêu chuẩn thi công',

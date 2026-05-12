@@ -27,16 +27,19 @@ export async function generateMetadata({
   const product = docs[0]
   if (!product) return {}
 
+  const seo = product.seo as { title?: string | null; description?: string | null; image?: unknown } | undefined
   const name = locale === 'en'
     ? ((product.name as { vi?: string; en?: string })?.en || (product.name as { vi?: string })?.vi || '')
     : ((product.name as { vi?: string })?.vi || '')
-  const desc = locale === 'en'
-    ? ((product.shortDescription as { vi?: string; en?: string })?.en || (product.shortDescription as { vi?: string })?.vi || '')
-    : ((product.shortDescription as { vi?: string })?.vi || '')
-  const thumb = product.thumbnail && typeof product.thumbnail === 'object'
+  const desc = seo?.description
+    || (locale === 'en'
+      ? ((product.shortDescription as { vi?: string; en?: string })?.en || (product.shortDescription as { vi?: string })?.vi || '')
+      : ((product.shortDescription as { vi?: string })?.vi || ''))
+  const seoImage = seo?.image && typeof seo.image === 'object' ? (seo.image as { url?: string }).url : undefined
+  const thumb = seoImage || (product.thumbnail && typeof product.thumbnail === 'object'
     ? (product.thumbnail as { url?: string }).url
-    : undefined
-  const title = `${name} | BắcÂu ESTEC`
+    : undefined)
+  const title = seo?.title || `${name} | Bắc Âu`
 
   return {
     title,

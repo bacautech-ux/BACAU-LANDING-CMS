@@ -73,5 +73,15 @@ export const News: CollectionConfig = {
       hasMany: true,
       options: ['Tin tức', 'Sự kiện', 'Hội thảo', 'Thông cáo'],
     },
+    {
+      name: 'seo',
+      type: 'group',
+      label: 'SEO',
+      fields: [
+        { name: 'title', type: 'text', label: 'SEO title' },
+        { name: 'description', type: 'textarea', label: 'SEO description' },
+        { name: 'image', type: 'upload', relationTo: 'media', label: 'Ảnh chia sẻ (OG Image)' },
+      ],
+    },
   ],
 }

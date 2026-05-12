@@ -96,7 +96,7 @@ export const SiteSettings: GlobalConfig = {
           name: 'logoText',
           type: 'text',
           localized: true,
-          defaultValue: 'BắcÂu',
+          defaultValue: 'Bắc Âu',
           label: 'Logo text',
         },
         {
@@ -165,7 +165,7 @@ export const SiteSettings: GlobalConfig = {
           name: 'logoText',
           type: 'text',
           localized: true,
-          defaultValue: 'BắcÂu',
+          defaultValue: 'Bắc Âu',
           label: 'Logo text',
         },
         {
@@ -215,13 +215,13 @@ export const SiteSettings: GlobalConfig = {
           name: 'copyright',
           type: 'text',
           localized: true,
-          defaultValue: '© 2024 BắcÂu. All rights reserved.',
+          defaultValue: '© 2024 Bắc Âu. All rights reserved.',
         },
         {
           name: 'credit',
           type: 'text',
           localized: true,
-          defaultValue: 'Designed by BắcÂu Technology',
+          defaultValue: 'Designed by Bắc Âu Technology',
         },
       ],
     },

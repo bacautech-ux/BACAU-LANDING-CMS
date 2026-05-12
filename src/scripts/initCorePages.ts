@@ -81,7 +81,7 @@ function richTextFromText(text: string) {
 const aboutSidebarByLocale = {
   vi: [
     {
-      title: 'Về BắcÂu',
+      title: 'Về Bắc Âu',
       titleHref: '/vi/gioi-thieu',
       items: [
         { label: 'Giới thiệu', href: '/vi/gioi-thieu#gioi-thieu' },
@@ -807,7 +807,7 @@ function aboutLayout(locale: Locale) {
     {
       blockType: 'pageHero',
       title: locale === 'vi' ? 'CÔNG TY BẮC ÂU' : 'BAC AU COMPANY',
-      breadcrumbLabel: locale === 'vi' ? 'Công ty BắcÂu' : 'Bac Au company',
+      breadcrumbLabel: locale === 'vi' ? 'Công ty Bắc Âu' : 'Bac Au company',
       backgroundImageURL:
         'https://images.unsplash.com/photo-1737703121444-c568a9d3bc0e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1600',
     },
@@ -842,7 +842,7 @@ function withAboutLocaleContent(layout: unknown, locale: Locale) {
       return {
         ...currentBlock,
         title: locale === 'vi' ? 'CÔNG TY BẮC ÂU' : 'BAC AU COMPANY',
-        breadcrumbLabel: locale === 'vi' ? 'Công ty BắcÂu' : 'Bac Au company',
+        breadcrumbLabel: locale === 'vi' ? 'Công ty Bắc Âu' : 'Bac Au company',
         backgroundImageURL:
           'https://images.unsplash.com/photo-1737703121444-c568a9d3bc0e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1600',
       }

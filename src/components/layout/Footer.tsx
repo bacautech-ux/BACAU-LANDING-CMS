@@ -113,13 +113,13 @@ export async function Footer({ locale }: FooterProps) {
   const columns = footer?.columns?.length ? footer.columns : fallbackColumns
   const backgroundColor = footer?.backgroundColor ?? '#0F172A'
   const accentColor = footer?.accentColor ?? '#B92C32'
-  const logoText = footer?.logoText ?? 'BắcÂu'
+  const logoText = footer?.logoText ?? 'Bắc Âu'
   const logoImage = getLogoImageData(footer)
   const description =
     footer?.description ??
     'Công ty TNHH Kỹ thuật & Dịch vụ Bắc Âu chuyên cung cấp giải pháp tự động hóa, thiết bị công nghiệp và dịch vụ kỹ thuật.'
-  const copyright = footer?.copyright ?? '© 2024 BắcÂu. All rights reserved.'
-  const credit = footer?.credit ?? 'Designed by BắcÂu Technology'
+  const copyright = footer?.copyright ?? '© 2024 Bắc Âu. All rights reserved.'
+  const credit = footer?.credit ?? 'Designed by Bắc Âu Technology'
 
   return (
     <footer className="text-white" style={{ backgroundColor }}>

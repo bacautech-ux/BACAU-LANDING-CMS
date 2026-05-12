@@ -2,8 +2,8 @@ import React from 'react'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Brand Kit | BắcÂu ESTEC',
-  description: 'BắcÂu ESTEC brand guidelines, colors, typography and logo usage.',
+  title: 'Brand Kit | Bắc Âu',
+  description: 'Bắc Âu brand guidelines, colors, typography and logo usage.',
 }
 
 // ─── Color Swatch Card ──────────────────────────────────────────────
@@ -96,7 +96,7 @@ function PrimaryBtn({ size = 'md', label = 'Xem thêm' }: { size?: 'lg' | 'md' |
 function SidebarPreview() {
   const groups = [
     {
-      title: 'Về BắcÂu',
+      title: 'Về Bắc Âu',
       items: ['Giới thiệu', 'Sứ mệnh - Tầm nhìn - Giá trị'],
     },
     {
@@ -153,9 +153,9 @@ function HeaderPreview() {
         className="flex items-center justify-between px-10 py-3 border-b"
         style={{ background: '#fff', borderColor: '#E4E4E7' }}
       >
-        <span className="text-[18px] font-bold" style={{ color: '#2b358c' }}>BắcÂu</span>
+        <span className="text-[18px] font-bold" style={{ color: '#2b358c' }}>Bắc Âu</span>
         <div className="flex items-center gap-6">
-          {['Công ty BắcÂu', 'Dự án', 'Giải pháp', 'Sản phẩm', 'Blog'].map((item) => (
+          {['Công ty Bắc Âu', 'Dự án', 'Giải pháp', 'Sản phẩm', 'Blog'].map((item) => (
             <span key={item} className="text-[10px] font-semibold" style={{ color: '#18181B' }}>
               {item}
             </span>
@@ -165,7 +165,7 @@ function HeaderPreview() {
       {/* Dropdown indicator */}
       <div className="px-10 py-0 border-b" style={{ borderColor: '#E4E4E7' }}>
         <div className="inline-flex items-center gap-1 py-2">
-          <span className="text-[10px] font-semibold" style={{ color: '#2b358c' }}>Công ty BắcÂu</span>
+          <span className="text-[10px] font-semibold" style={{ color: '#2b358c' }}>Công ty Bắc Âu</span>
           <div className="h-0.5 w-full" style={{ background: '#2b358c' }} />
         </div>
       </div>
@@ -175,7 +175,7 @@ function HeaderPreview() {
         style={{ background: '#fff', borderColor: '#E4E4E7', boxShadow: '0 4px 12px #00000015' }}
       >
         {[
-          { label: 'Giới thiệu', items: ['Về BắcÂu', 'Sứ mệnh & Tầm nhìn', 'Sơ đồ tổ chức'] },
+          { label: 'Giới thiệu', items: ['Về Bắc Âu', 'Sứ mệnh & Tầm nhìn', 'Sơ đồ tổ chức'] },
           { label: 'Lĩnh vực', items: ['Tự động hóa', 'Điện công nghiệp', 'Số hóa'] },
           { label: 'Năng lực', items: ['Nhà xưởng', 'Văn phòng'] },
           { label: 'Chứng chỉ', items: ['ISO 9001', 'Đối tác Siemens'] },
@@ -201,7 +201,7 @@ export default function BrandKitPage() {
         className="flex flex-col justify-center"
         style={{ background: '#2b358c', height: 200, padding: '60px 80px' }}
       >
-        <h1 className="text-[42px] font-bold text-white">BắcÂu Brand Kit</h1>
+        <h1 className="text-[42px] font-bold text-white">Bắc Âu Brand Kit</h1>
         <p className="text-[18px] mt-3" style={{ color: '#FFFFFFCC' }}>Brand Identity Guidelines</p>
       </div>
 
@@ -212,18 +212,18 @@ export default function BrandKitPage() {
         <div className="flex flex-col gap-6">
           <SectionHeader
             title="Brand Colors"
-            subtitle="Hai màu chủ đạo của thương hiệu BắcÂu"
+            subtitle="Hai màu chủ đạo của thương hiệu Bắc Âu"
           />
           <div className="flex gap-10">
             <ColorCard
               hex="#2b358c"
-              name="BắcÂu Blue"
+              name="Bắc Âu Blue"
               rgb="RGB: 43, 53, 140"
               usage="Primary brand color — Headers, Navigation, CTAs"
             />
             <ColorCard
               hex="#b92c32"
-              name="BắcÂu Red"
+              name="Bắc Âu Red"
               rgb="RGB: 185, 44, 50"
               usage="Accent brand color — Highlights, Alerts, Key elements"
             />
@@ -272,7 +272,7 @@ export default function BrandKitPage() {
         <div className="flex flex-col gap-10">
           <SectionHeader
             title="Components"
-            subtitle="Các component mẫu được sử dụng trong website BắcÂu"
+            subtitle="Các component mẫu được sử dụng trong website Bắc Âu"
           />
 
           {/* Buttons */}

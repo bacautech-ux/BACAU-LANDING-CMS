@@ -1069,6 +1069,11 @@ export interface Project {
       }[]
     | null;
   featured?: boolean | null;
+  seo?: {
+    title?: string | null;
+    description?: string | null;
+    image?: (number | null) | Media;
+  };
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
@@ -1124,6 +1129,11 @@ export interface News {
     } | null;
   };
   tags?: ('Tin tức' | 'Sự kiện' | 'Hội thảo' | 'Thông cáo')[] | null;
+  seo?: {
+    title?: string | null;
+    description?: string | null;
+    image?: (number | null) | Media;
+  };
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
@@ -1187,6 +1197,11 @@ export interface Product {
   };
   brand?: string | null;
   featured?: boolean | null;
+  seo?: {
+    title?: string | null;
+    description?: string | null;
+    image?: (number | null) | Media;
+  };
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
@@ -2077,6 +2092,13 @@ export interface ProjectsSelect<T extends boolean = true> {
         id?: T;
       };
   featured?: T;
+  seo?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        image?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
@@ -2109,6 +2131,13 @@ export interface NewsSelect<T extends boolean = true> {
         en?: T;
       };
   tags?: T;
+  seo?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        image?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
@@ -2175,6 +2204,13 @@ export interface ProductsSelect<T extends boolean = true> {
       };
   brand?: T;
   featured?: T;
+  seo?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        image?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
   _status?: T;

@@ -10,7 +10,7 @@ async function seed() {
       slug: 'gioi-thieu',
       hero: {
         heading: 'CÔNG TY BẮC ÂU',
-        breadcrumbLabel: 'Công ty BắcÂu',
+        breadcrumbLabel: 'Công ty Bắc Âu',
         backgroundImage: null,
       },
     },

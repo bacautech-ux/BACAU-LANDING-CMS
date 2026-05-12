@@ -27,8 +27,8 @@ export async function generateMetadata({
   const page = docs[0]
   const seo = page?.seo as { title?: string | null; description?: string | null; image?: unknown } | undefined
   const title = seo?.title || (locale === 'en'
-    ? 'ESTEC BắcÂu – Industrial Automation Solutions'
-    : 'BắcÂu – Giải pháp Tự động hóa Công nghiệp')
+    ? 'Bắc Âu – Industrial Automation Solutions'
+    : 'Bắc Âu – Giải pháp Tự động hóa Công nghiệp')
   const description = seo?.description || (locale === 'en'
     ? 'Leading provider of industrial automation, digitalization and energy management solutions in Vietnam.'
     : 'Nhà cung cấp giải pháp hàng đầu trong lĩnh vực Tự Động Hóa và Số hóa công nghiệp tại Việt Nam.')
