@@ -9,14 +9,17 @@ interface MediaValue {
   filename?: string | null
 }
 
+interface ProductCategoryRef {
+  name?: { vi?: string | null; en?: string | null } | null
+}
+
 interface ProductDocument {
   slug?: string | null
   name?: {
     vi?: string | null
     en?: string | null
   } | null
-  displayCategory?: string | { vi?: string | null; en?: string | null } | null
-  category?: string | null
+  productCategories?: (ProductCategoryRef | number)[] | null
   thumbnail?: MediaValue | null
 }
 
@@ -36,16 +39,14 @@ interface ProductsSectionProps {
   featuredProducts?: unknown
 }
 
-const categoryLabels: Record<string, string> = {
-  automation: 'Automation Device',
-  measurement: 'Measurement Device',
-  'industrial-valve': 'Valve & Actuator',
-  electrical: 'Electrical Device',
-  motor: 'Motor & Drive',
-  sensor: 'Sensor & Instrument',
-}
-
 const defaultProductImage = 'https://images.unsplash.com/photo-1703668984128-b506579acdd2?w=600'
+
+function getCategoryLabel(cats: (ProductCategoryRef | number)[] | null | undefined, locale: string): string {
+  if (!Array.isArray(cats) || cats.length === 0) return ''
+  const first = cats[0]
+  if (typeof first === 'number' || !first?.name) return ''
+  return (locale === 'en' ? (first.name.en || first.name.vi) : first.name.vi) || ''
+}
 
 function getMediaURL(value: unknown): string | undefined {
   if (!value || typeof value !== 'object') return undefined
@@ -53,17 +54,6 @@ function getMediaURL(value: unknown): string | undefined {
   if (media.url) return media.url
   if (media.filename) return `/api/media/file/${media.filename}`
   return undefined
-}
-
-function getLocalizedText(
-  value: string | { vi?: string | null; en?: string | null } | null | undefined,
-  locale: string,
-) {
-  if (typeof value === 'string') return value
-  if (!value || typeof value !== 'object') return undefined
-  const typedLocale = locale === 'en' ? 'en' : 'vi'
-  const fallbackLocale = typedLocale === 'en' ? 'vi' : 'en'
-  return value[typedLocale] ?? value[fallbackLocale] ?? undefined
 }
 
 function isProductDocument(value: unknown): value is ProductDocument {
@@ -80,11 +70,7 @@ function normalizeProduct(doc: ProductDocument, locale: string): ProductCard | n
   return {
     slug: doc.slug,
     name,
-    category:
-      getLocalizedText(doc.displayCategory, locale) ??
-      categoryLabels[doc.category ?? ''] ??
-      doc.category ??
-      '',
+    category: getCategoryLabel(doc.productCategories, locale),
     image: getMediaURL(doc.thumbnail) ?? defaultProductImage,
   }
 }

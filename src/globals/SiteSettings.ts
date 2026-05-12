@@ -121,8 +121,7 @@ export const SiteSettings: GlobalConfig = {
             {
               name: 'href',
               type: 'text',
-              required: true,
-              admin: { description: 'Nhập path không gồm locale, ví dụ /gioi-thieu.' },
+              admin: { description: 'Bỏ trống nếu chỉ dùng menu con. Nhập path không gồm locale, ví dụ /gioi-thieu.' },
             },
             {
               name: 'children',

@@ -11,6 +11,9 @@ export interface ProjectCardData {
   categoryLabel: string
   thumbnail: string
   thumbnailAlt: string
+  customerName?: string
+  location?: string
+  year?: number | null
 }
 
 interface ProjectCardProps {
@@ -40,12 +43,23 @@ function ListCard({ project, href }: { project: ProjectCardData; href: string })
         >
           {project.title}
         </h3>
-        <p
-          className="text-text-secondary line-clamp-2"
-          style={{ fontSize: 12, lineHeight: 1.5 }}
-        >
-          {project.summary}
-        </p>
+        <div className="flex flex-col gap-1" style={{ fontSize: 12, lineHeight: 1.5 }}>
+          {project.customerName && (
+            <p className="text-text-secondary line-clamp-1">
+              <span className="font-medium text-text-primary">Tên khách hàng:</span> {project.customerName}
+            </p>
+          )}
+          {project.location && (
+            <p className="text-text-secondary line-clamp-1">
+              <span className="font-medium text-text-primary">Địa điểm:</span> {project.location}
+            </p>
+          )}
+          {project.year && (
+            <p className="text-text-secondary line-clamp-1">
+              <span className="font-medium text-text-primary">Thời gian:</span> Năm {project.year}
+            </p>
+          )}
+        </div>
         <span className="text-primary-blue" style={{ fontSize: 11 }}>
           {project.categoryLabel}
         </span>

@@ -13,7 +13,7 @@ interface HeaderProps {
 
 interface NavItem {
   label: string
-  href: string
+  href?: string | null
   children?: NavItem[] | null
 }
 
@@ -33,7 +33,7 @@ interface SiteSettingsHeader {
   navItems?: NavItem[] | null
 }
 
-function withLocalePath(href: string, locale: string) {
+function withLocalePath(href: string | null | undefined, locale: string) {
   if (!href) return `/${locale}`
   if (/^(https?:|mailto:|tel:)/.test(href)) return href
   if (href === '/') return `/${locale}`
@@ -171,12 +171,12 @@ export async function Header({ locale }: HeaderProps) {
                   {item.children && <span className="text-text-muted text-xs transition-transform duration-200 group-hover:rotate-180">▾</span>}
                 </Link>
                 {item.children && (
-                  <div className="dropdown-enter absolute top-full left-0 min-w-52 bg-white shadow-xl border-t-2 border-primary-red z-50">
-                    {item.children.map((child) => (
+                  <div className="dropdown-enter absolute top-full left-0 w-max bg-white shadow-xl border-t-2 border-primary-red z-50">
+                    {item.children.map((child, ci) => (
                       <Link
-                        key={child.href}
+                        key={`${child.href}-${ci}`}
                         href={child.href}
-                        className="block px-4 py-3 text-sm text-text-primary hover:bg-bg-light hover:text-primary-navy hover:pl-5 border-b border-border/50 last:border-0 transition-all duration-200"
+                        className="block whitespace-nowrap px-5 py-3 text-sm text-text-primary hover:bg-bg-light hover:text-primary-navy hover:pl-6 border-b border-border/50 last:border-0 transition-all duration-200"
                       >
                         {child.label}
                       </Link>

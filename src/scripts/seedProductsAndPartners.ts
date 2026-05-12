@@ -253,8 +253,6 @@ async function seedProducts(payload: Awaited<ReturnType<typeof getPayload>>) {
     const data = {
       name: product.name,
       slug: product.slug,
-      category: product.category,
-      displayCategory: product.displayCategory.vi,
       thumbnail,
       brand: product.brand,
       featured: true,
@@ -271,15 +269,6 @@ async function seedProducts(payload: Awaited<ReturnType<typeof getPayload>>) {
           collection: 'products',
           data: data as never,
         })
-
-    await payload.update({
-      collection: 'products',
-      id: productDoc.id,
-      locale: 'en',
-      data: {
-        displayCategory: product.displayCategory.en,
-      },
-    })
     console.log(`[seed] products/${product.slug}`)
   }
 }

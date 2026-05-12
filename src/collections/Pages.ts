@@ -40,7 +40,9 @@ export const Pages: CollectionConfig = {
     group: 'Cấu hình Website',
     useAsTitle: 'title',
     description: 'Quản lý trang website — admin tự tạo URL, chọn template và sắp xếp section',
+    defaultColumns: ['title', 'slug', 'pageGroup', 'template', 'layout'],
     components: {
+      beforeListTable: ['/src/components/admin/PageGroupedView.tsx#PageGroupedView'],
       views: {
         blockLibraryRedirect: {
           Component: '/src/components/admin/BlockLibraryRedirect.tsx#BlockLibraryRedirect',
@@ -61,6 +63,16 @@ export const Pages: CollectionConfig = {
       type: 'text',
       localized: true,
       label: 'Tên trang',
+    },
+    {
+      name: 'pageGroup',
+      type: 'relationship',
+      relationTo: 'page-groups',
+      label: 'Nhóm trang',
+      admin: {
+        position: 'sidebar',
+        description: 'Chọn nhóm để phân loại trang. Quản lý nhóm tại mục "Nhóm trang".',
+      },
     },
     {
       name: 'slug',

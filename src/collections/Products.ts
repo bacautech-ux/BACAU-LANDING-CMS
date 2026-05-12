@@ -4,6 +4,8 @@ import { revalidatePath } from 'next/cache'
 const revalidateProducts = () => {
   revalidatePath('/vi/san-pham')
   revalidatePath('/en/san-pham')
+  revalidatePath('/vi/industry-products')
+  revalidatePath('/en/industry-products')
   revalidatePath('/vi')
   revalidatePath('/en')
 }
@@ -11,6 +13,12 @@ const revalidateProducts = () => {
 export const Products: CollectionConfig = {
   slug: 'products',
   admin: { useAsTitle: 'nameLabel' },
+  access: {
+    read: () => true,
+    create: () => true,
+    update: () => true,
+    delete: () => true,
+  },
   versions: { drafts: true },
   hooks: {
     afterChange: [revalidateProducts],
@@ -42,31 +50,36 @@ export const Products: CollectionConfig = {
     },
     { name: 'slug', type: 'text', required: true, unique: true, admin: { position: 'sidebar' } },
     {
-      name: 'category',
-      type: 'select',
-      required: true,
-      options: [
-        { label: 'Thiết bị Tự động hóa', value: 'automation' },
-        { label: 'Thiết bị Đo lường', value: 'measurement' },
-        { label: 'Van Công nghiệp', value: 'industrial-valve' },
-        { label: 'Thiết bị Điện', value: 'electrical' },
-        { label: 'Động cơ Điện', value: 'motor' },
-        { label: 'Cảm biến', value: 'sensor' },
-      ],
-    },
-    {
-      name: 'displayCategory',
-      type: 'text',
-      localized: true,
-      label: 'Category label hiển thị trên card',
-      admin: {
-        description: 'VD: Valve & Actuator, Motor & Drive, Sensor & Instrument.',
-      },
+      name: 'productCategories',
+      type: 'relationship',
+      relationTo: 'product-categories',
+      hasMany: true,
+      label: 'Danh mục sản phẩm',
     },
     { name: 'thumbnail', type: 'upload', relationTo: 'media', required: true },
     {
+      name: 'gallery',
+      type: 'array',
+      label: 'Hình ảnh sản phẩm',
+      maxRows: 10,
+      fields: [
+        { name: 'image', type: 'upload', relationTo: 'media', required: true },
+        { name: 'imageURL', type: 'text', label: 'Image URL (fallback)' },
+      ],
+    },
+    {
+      name: 'shortDescription',
+      type: 'group',
+      label: 'Mô tả ngắn',
+      fields: [
+        { name: 'vi', type: 'textarea', label: 'VI' },
+        { name: 'en', type: 'textarea', label: 'EN' },
+      ],
+    },
+    {
       name: 'description',
       type: 'group',
+      label: 'Mô tả chi tiết (Rich Text)',
       fields: [
         { name: 'vi', type: 'richText', label: 'VI' },
         { name: 'en', type: 'richText', label: 'EN' },

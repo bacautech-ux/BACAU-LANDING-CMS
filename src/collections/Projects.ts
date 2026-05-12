@@ -2,13 +2,17 @@ import type { CollectionConfig } from 'payload'
 import { revalidatePath } from 'next/cache'
 
 const revalidateProject = ({ doc }: { doc: { slug?: string } }) => {
-  revalidatePath('/vi/du-an-tham-khao')
-  revalidatePath('/en/du-an-tham-khao')
-  revalidatePath('/vi')
-  revalidatePath('/en')
-  if (doc?.slug) {
-    revalidatePath(`/vi/chi-tiet-du-an/${doc.slug}`)
-    revalidatePath(`/en/chi-tiet-du-an/${doc.slug}`)
+  try {
+    revalidatePath('/vi/du-an-tham-khao')
+    revalidatePath('/en/du-an-tham-khao')
+    revalidatePath('/vi')
+    revalidatePath('/en')
+    if (doc?.slug) {
+      revalidatePath(`/vi/chi-tiet-du-an/${doc.slug}`)
+      revalidatePath(`/en/chi-tiet-du-an/${doc.slug}`)
+    }
+  } catch {
+    // Outside Next.js context (e.g. seed scripts)
   }
 }
 

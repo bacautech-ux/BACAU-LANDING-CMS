@@ -18,6 +18,9 @@ interface ProjectDocument {
   industry?: string | null
   featuredBadgeLabel?: string | { vi?: string | null; en?: string | null } | null
   thumbnail?: MediaValue | null
+  customerName?: { vi?: string | null; en?: string | null } | null
+  location?: string | null
+  year?: number | null
 }
 
 interface ProjectsListingSectionProps {
@@ -93,6 +96,9 @@ function normalizeProject(doc: ProjectDocument, locale: string): ProjectCardData
       getMediaURL(doc.thumbnail) ??
       'https://images.unsplash.com/photo-1718091289341-7ef5d938d0fc?w=600',
     thumbnailAlt: title,
+    customerName: doc.customerName?.[typedLocale] ?? doc.customerName?.[fallbackLocale] ?? undefined,
+    location: doc.location ?? undefined,
+    year: doc.year ?? undefined,
   }
 }
 

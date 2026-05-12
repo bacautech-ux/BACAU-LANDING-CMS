@@ -46,6 +46,23 @@ export function PageTransition() {
     return () => document.removeEventListener('click', handleClick)
   }, [pathname])
 
+  // Browser back/forward and bfcache restoration → clear spinner
+  useEffect(() => {
+    const clear = () => {
+      pending.current = false
+      if (timer.current) clearTimeout(timer.current)
+      setShow(false)
+    }
+    const handlePageShow = (e: PageTransitionEvent) => { if (e.persisted) clear() }
+
+    window.addEventListener('popstate', clear)
+    window.addEventListener('pageshow', handlePageShow)
+    return () => {
+      window.removeEventListener('popstate', clear)
+      window.removeEventListener('pageshow', handlePageShow)
+    }
+  }, [])
+
   // Pathname changed → navigation done, hide spinner
   useEffect(() => {
     if (!mounted.current) { mounted.current = true; return }

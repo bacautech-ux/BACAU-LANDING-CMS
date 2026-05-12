@@ -70,8 +70,10 @@ export interface Config {
     users: User;
     media: Media;
     pages: Page;
+    'page-groups': PageGroup;
     projects: Project;
     news: News;
+    'product-categories': ProductCategory;
     products: Product;
     partners: Partner;
     services: Service;
@@ -85,8 +87,10 @@ export interface Config {
     users: UsersSelect<false> | UsersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     pages: PagesSelect<false> | PagesSelect<true>;
+    'page-groups': PageGroupsSelect<false> | PageGroupsSelect<true>;
     projects: ProjectsSelect<false> | ProjectsSelect<true>;
     news: NewsSelect<false> | NewsSelect<true>;
+    'product-categories': ProductCategoriesSelect<false> | ProductCategoriesSelect<true>;
     products: ProductsSelect<false> | ProductsSelect<true>;
     partners: PartnersSelect<false> | PartnersSelect<true>;
     services: ServicesSelect<false> | ServicesSelect<true>;
@@ -191,6 +195,10 @@ export interface Media {
 export interface Page {
   id: number;
   title?: string | null;
+  /**
+   * Chọn nhóm để phân loại trang. Quản lý nhóm tại mục "Nhóm trang".
+   */
+  pageGroup?: (number | null) | PageGroup;
   /**
    * Dùng để định danh page trong CMS. Riêng Trang chủ dùng "home"; URL public là /vi hoặc /en.
    */
@@ -748,6 +756,19 @@ export interface Page {
             blockType: 'products';
           }
         | {
+            sourceMode?: ('auto' | 'manual') | null;
+            categories?: (number | ProductCategory)[] | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'productCategoryListing';
+          }
+        | {
+            category: number | ProductCategory;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'categoryProducts';
+          }
+        | {
             title?: string | null;
             subtitle?: string | null;
             backgroundColor?: string | null;
@@ -803,6 +824,53 @@ export interface Page {
             blockName?: string | null;
             blockType: 'richContent';
           }
+        | {
+            title: string;
+            /**
+             * Nhập URL, sau đó dùng nút "Fetch metadata" ở admin hoặc tự điền title/description/thumbnail.
+             */
+            links?:
+              | {
+                  /**
+                   * Link bài viết / trang bên ngoài
+                   */
+                  url: string;
+                  /**
+                   * Để trống = dùng tiêu đề auto-fetch từ URL
+                   */
+                  title?: string | null;
+                  /**
+                   * Để trống = dùng mô tả auto-fetch từ URL
+                   */
+                  description?: string | null;
+                  /**
+                   * URL ảnh OG lấy từ trang nguồn
+                   */
+                  thumbnailURL?: string | null;
+                  /**
+                   * Upload ảnh sẽ ưu tiên hơn URL thumbnail
+                   */
+                  thumbnail?: (number | null) | Media;
+                  /**
+                   * Hiển thị số lượt xem (tuỳ chọn)
+                   */
+                  viewCount?: number | null;
+                  id?: string | null;
+                }[]
+              | null;
+            loadMoreLabel?: string | null;
+            /**
+             * Để trống = hiển thị thêm item (client-side). Có link = chuyển trang.
+             */
+            loadMoreHref?: string | null;
+            /**
+             * Số card hiển thị trước khi bấm "Xem thêm"
+             */
+            initialCount?: number | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'externalLinks';
+          }
       )[]
     | null;
   seo?: {
@@ -810,6 +878,29 @@ export interface Page {
     description?: string | null;
     image?: (number | null) | Media;
   };
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * Tạo và quản lý nhóm để phân loại các trang trong CMS
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "page-groups".
+ */
+export interface PageGroup {
+  id: number;
+  /**
+   * Ví dụ: Trang chủ, Giới thiệu, Giải pháp...
+   */
+  name: string;
+  /**
+   * Mã HEX, ví dụ: #2b358c. Dùng cho badge và icon trong danh sách.
+   */
+  color?: string | null;
+  /**
+   * Số nhỏ hiện trước. Ví dụ: Trang chủ = 1, Giới thiệu = 2...
+   */
+  order?: number | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -1049,12 +1140,19 @@ export interface Product {
     en?: string | null;
   };
   slug: string;
-  category: 'automation' | 'measurement' | 'industrial-valve' | 'electrical' | 'motor' | 'sensor';
-  /**
-   * VD: Valve & Actuator, Motor & Drive, Sensor & Instrument.
-   */
-  displayCategory?: string | null;
+  productCategories?: (number | ProductCategory)[] | null;
   thumbnail: number | Media;
+  gallery?:
+    | {
+        image: number | Media;
+        imageURL?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  shortDescription?: {
+    vi?: string | null;
+    en?: string | null;
+  };
   description?: {
     vi?: {
       root: {
@@ -1092,6 +1190,35 @@ export interface Product {
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "product-categories".
+ */
+export interface ProductCategory {
+  id: number;
+  nameLabel?: string | null;
+  name: {
+    vi: string;
+    en?: string | null;
+  };
+  slug: string;
+  description?: {
+    vi?: string | null;
+    en?: string | null;
+  };
+  image?: (number | null) | Media;
+  /**
+   * Dùng khi chưa upload ảnh. Dán URL ảnh từ Cloudinary hoặc bên ngoài.
+   */
+  imageURL?: string | null;
+  order?: number | null;
+  /**
+   * Bỏ chọn để ẩn danh mục khỏi trang sản phẩm.
+   */
+  visible?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1198,12 +1325,20 @@ export interface PayloadLockedDocument {
         value: number | Page;
       } | null)
     | ({
+        relationTo: 'page-groups';
+        value: number | PageGroup;
+      } | null)
+    | ({
         relationTo: 'projects';
         value: number | Project;
       } | null)
     | ({
         relationTo: 'news';
         value: number | News;
+      } | null)
+    | ({
+        relationTo: 'product-categories';
+        value: number | ProductCategory;
       } | null)
     | ({
         relationTo: 'products';
@@ -1308,6 +1443,7 @@ export interface MediaSelect<T extends boolean = true> {
  */
 export interface PagesSelect<T extends boolean = true> {
   title?: T;
+  pageGroup?: T;
   slug?: T;
   template?: T;
   layout?:
@@ -1761,6 +1897,21 @@ export interface PagesSelect<T extends boolean = true> {
               id?: T;
               blockName?: T;
             };
+        productCategoryListing?:
+          | T
+          | {
+              sourceMode?: T;
+              categories?: T;
+              id?: T;
+              blockName?: T;
+            };
+        categoryProducts?:
+          | T
+          | {
+              category?: T;
+              id?: T;
+              blockName?: T;
+            };
         ctaBanner?:
           | T
           | {
@@ -1810,6 +1961,27 @@ export interface PagesSelect<T extends boolean = true> {
               id?: T;
               blockName?: T;
             };
+        externalLinks?:
+          | T
+          | {
+              title?: T;
+              links?:
+                | T
+                | {
+                    url?: T;
+                    title?: T;
+                    description?: T;
+                    thumbnailURL?: T;
+                    thumbnail?: T;
+                    viewCount?: T;
+                    id?: T;
+                  };
+              loadMoreLabel?: T;
+              loadMoreHref?: T;
+              initialCount?: T;
+              id?: T;
+              blockName?: T;
+            };
       };
   seo?:
     | T
@@ -1818,6 +1990,17 @@ export interface PagesSelect<T extends boolean = true> {
         description?: T;
         image?: T;
       };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "page-groups_select".
+ */
+export interface PageGroupsSelect<T extends boolean = true> {
+  name?: T;
+  color?: T;
+  order?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -1932,6 +2115,32 @@ export interface NewsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "product-categories_select".
+ */
+export interface ProductCategoriesSelect<T extends boolean = true> {
+  nameLabel?: T;
+  name?:
+    | T
+    | {
+        vi?: T;
+        en?: T;
+      };
+  slug?: T;
+  description?:
+    | T
+    | {
+        vi?: T;
+        en?: T;
+      };
+  image?: T;
+  imageURL?: T;
+  order?: T;
+  visible?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "products_select".
  */
 export interface ProductsSelect<T extends boolean = true> {
@@ -1943,9 +2152,21 @@ export interface ProductsSelect<T extends boolean = true> {
         en?: T;
       };
   slug?: T;
-  category?: T;
-  displayCategory?: T;
+  productCategories?: T;
   thumbnail?: T;
+  gallery?:
+    | T
+    | {
+        image?: T;
+        imageURL?: T;
+        id?: T;
+      };
+  shortDescription?:
+    | T
+    | {
+        vi?: T;
+        en?: T;
+      };
   description?:
     | T
     | {
@@ -2296,9 +2517,9 @@ export interface SiteSetting {
       | {
           label: string;
           /**
-           * Nhập path không gồm locale, ví dụ /gioi-thieu.
+           * Bỏ trống nếu chỉ dùng menu con. Nhập path không gồm locale, ví dụ /gioi-thieu.
            */
-          href: string;
+          href?: string | null;
           children?:
             | {
                 label: string;

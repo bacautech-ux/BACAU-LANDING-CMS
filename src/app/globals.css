@@ -60,6 +60,15 @@
     }
   }
 
+  /* Hide scrollbar */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
   /* Card hover lift — subtle -4px rise with shadow */
   .card-hover {
     transition: transform 0.3s cubic-bezier(0.33, 1, 0.68, 1),

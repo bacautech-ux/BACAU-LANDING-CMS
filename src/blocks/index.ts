@@ -18,6 +18,9 @@ export { BrandLogosBlock } from './BrandLogosBlock'
 export { HeroBannerBlock } from './HeroBannerBlock'
 export { WelcomeIntroBlock } from './WelcomeIntroBlock'
 export { RichContentBlock } from './RichContentBlock'
+export { ExternalLinksBlock } from './ExternalLinksBlock'
+export { ProductCategoryListingBlock } from './ProductCategoryListingBlock'
+export { CategoryProductsBlock } from './CategoryProductsBlock'
 
 import { HeroBlock } from './HeroBlock'
 import { HeroBannerBlock } from './HeroBannerBlock'
@@ -39,6 +42,9 @@ import { ProductsBlock } from './ProductsBlock'
 import { CTABannerBlock } from './CTABannerBlock'
 import { BrandLogosBlock } from './BrandLogosBlock'
 import { RichContentBlock } from './RichContentBlock'
+import { ExternalLinksBlock } from './ExternalLinksBlock'
+import { ProductCategoryListingBlock } from './ProductCategoryListingBlock'
+import { CategoryProductsBlock } from './CategoryProductsBlock'
 
 export const PageLayoutBlocks = [
   HeroBlock,
@@ -58,7 +64,10 @@ export const PageLayoutBlocks = [
   FeaturedProjectsBlock,
   PartnersBlock,
   ProductsBlock,
+  ProductCategoryListingBlock,
+  CategoryProductsBlock,
   CTABannerBlock,
   BrandLogosBlock,
   RichContentBlock,
+  ExternalLinksBlock,
 ]

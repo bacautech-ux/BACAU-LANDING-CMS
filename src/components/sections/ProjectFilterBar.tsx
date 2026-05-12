@@ -41,7 +41,7 @@ export function ProjectFilterBar({
   return (
     <div className="bg-white flex flex-col">
       {/* Parent tabs row */}
-      <div className="flex items-stretch overflow-x-auto px-4 md:px-6 xl:px-[60px]" style={{ borderBottom: '2px solid #B92C32' }}>
+      <div className="flex items-stretch overflow-x-auto overflow-y-hidden scrollbar-hide px-4 md:px-6 xl:px-[60px]" style={{ borderBottom: '2px solid #B92C32' }}>
         {parents.map((p) => {
           const isActive = activeParent === p.value
           return (
@@ -70,7 +70,7 @@ export function ProjectFilterBar({
       </div>
 
       {/* Sub-industry tags row */}
-      <div className="flex items-center overflow-x-auto px-4 py-3 md:px-6 xl:px-[60px]" style={{ borderBottom: '1px solid #E2E8F0' }}>
+      <div className="flex items-center overflow-x-auto overflow-y-hidden scrollbar-hide px-4 py-3 md:px-6 xl:px-[60px]" style={{ borderBottom: '1px solid #E2E8F0' }}>
         {allSubs.map((s, i) => {
           const isActive = activeSub === s.value
           return (

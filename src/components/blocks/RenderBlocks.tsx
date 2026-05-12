@@ -13,6 +13,10 @@ import { ProjectsListingSection } from '@/components/sections/ProjectsListingSec
 import { ServicesSection } from '@/components/sections/ServicesSection'
 import { WelcomeIntro } from '@/components/sections/WelcomeIntro'
 import { RichContentSection } from '@/components/sections/RichContentSection'
+import { ExternalLinksSection } from '@/components/sections/ExternalLinksSection'
+import type { ExternalLinkItem } from '@/components/sections/ExternalLinksSection'
+import { ProductCategoryListingSection } from '@/components/sections/ProductCategoriesSection'
+import { CategoryProductsSection } from '@/components/sections/CategoryProductsSection'
 // V2 Modern Split
 import { HeroV2 } from '@/components/home-v2-modern-split/HeroV2'
 import { ServicesBentoV2 } from '@/components/home-v2-modern-split/ServicesBentoV2'
@@ -485,6 +489,23 @@ function renderBlock(block: Record<string, unknown>, locale: string, index: numb
           featuredProducts={block.featuredProducts}
         />
       )
+    case 'productCategoryListing':
+      return (
+        <ProductCategoryListingSection
+          key={index}
+          locale={locale}
+          sourceMode={block.sourceMode as string | null | undefined}
+          categories={block.categories}
+        />
+      )
+    case 'categoryProducts':
+      return (
+        <CategoryProductsSection
+          key={index}
+          locale={locale}
+          category={block.category}
+        />
+      )
     case 'ctaBanner':
       return (
         <CTABanner
@@ -509,6 +530,17 @@ function renderBlock(block: Record<string, unknown>, locale: string, index: numb
           key={index}
           title={block.title as string | null | undefined}
           content={block.content as import('@payloadcms/richtext-lexical/lexical').SerializedEditorState | null | undefined}
+        />
+      )
+    case 'externalLinks':
+      return (
+        <ExternalLinksSection
+          key={index}
+          title={block.title as string}
+          links={block.links as ExternalLinkItem[]}
+          loadMoreLabel={block.loadMoreLabel as string | null | undefined}
+          loadMoreHref={block.loadMoreHref as string | null | undefined}
+          initialCount={block.initialCount as number | null | undefined}
         />
       )
     case 'brandLogos':

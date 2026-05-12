@@ -185,7 +185,7 @@ export async function NewsSection({
             <Link
               key={item.slug}
               href={`/${locale}/tin-tuc/${item.slug}`}
-              className="flex flex-col overflow-hidden border border-border bg-white transition-shadow hover:shadow-md"
+              className="card-hover group flex flex-col overflow-hidden border border-border bg-white"
             >
               {/* Image */}
               <div className="relative h-[200px] w-full overflow-hidden xl:h-[220px]">
@@ -193,7 +193,7 @@ export async function NewsSection({
                   src={item.image}
                   alt={item.title}
                   fill
-                  className="object-cover transition-transform duration-300 hover:scale-105"
+                  className="object-cover transition-transform duration-500 group-hover:scale-105"
                   sizes="(max-width: 767px) 100vw, 33vw"
                 />
               </div>
@@ -202,7 +202,7 @@ export async function NewsSection({
                 <span className="text-[12px] font-semibold text-text-secondary">
                   {item.date}
                 </span>
-                <h3 className="line-clamp-2 text-[15px] font-bold leading-[1.4] text-text-primary">
+                <h3 className="line-clamp-2 text-[15px] font-bold leading-[1.4] text-text-primary transition-colors group-hover:text-primary-blue">
                   {item.title}
                 </h3>
                 <p className="line-clamp-3 text-[13px] leading-[1.5] text-text-secondary">
@@ -226,14 +226,14 @@ export async function NewsSection({
         {/* Featured card — full image with overlay */}
         <Link
           href={`/${locale}/tin-tuc/${featured.slug}`}
-          className="relative flex h-[280px] flex-col justify-between overflow-hidden rounded-lg md:h-[285px] md:rounded-xl xl:h-[440px]"
+          className="card-hover group relative flex h-[280px] flex-col justify-between overflow-hidden rounded-lg md:h-[285px] md:rounded-xl xl:h-[440px]"
           style={{ boxShadow: '0 4px 20px #00000020' }}
         >
           <Image
             src={featured.image}
             alt={featured.title}
             fill
-            className="object-cover"
+            className="object-cover transition-transform duration-500 group-hover:scale-105"
             sizes="(max-width: 767px) 100vw, 50vw"
           />
           {/* Date badge top */}
@@ -264,16 +264,16 @@ export async function NewsSection({
             <Link
               key={item.slug}
               href={`/${locale}/tin-tuc/${item.slug}`}
-              className="flex min-h-[140px] overflow-hidden rounded-lg border border-border bg-white transition-shadow hover:shadow-md md:flex-1 md:rounded-xl"
+              className="card-hover group flex min-h-[140px] overflow-hidden rounded-lg border border-border bg-white md:flex-1 md:rounded-xl"
               style={{ boxShadow: '0 2px 12px #00000012' }}
             >
               {/* Image */}
-              <div className="relative w-[120px] shrink-0 md:w-[150px] xl:w-[220px]">
+              <div className="relative w-[120px] shrink-0 overflow-hidden md:w-[150px] xl:w-[220px]">
                 <Image
                   src={item.image}
                   alt={item.title}
                   fill
-                  className="object-cover"
+                  className="object-cover transition-transform duration-500 group-hover:scale-105"
                   sizes="(max-width: 767px) 120px, (max-width: 1279px) 150px, 220px"
                 />
               </div>
@@ -282,7 +282,7 @@ export async function NewsSection({
                 <span className="inline-block self-start rounded bg-primary-red px-3 py-1 text-[10px] font-bold text-white xl:text-[11px]">
                   {item.date}
                 </span>
-                <h3 className="line-clamp-2 text-[14px] font-bold leading-[1.35] text-text-primary xl:text-[15px] xl:leading-[1.4]">
+                <h3 className="line-clamp-2 text-[14px] font-bold leading-[1.35] text-text-primary transition-colors group-hover:text-primary-blue xl:text-[15px] xl:leading-[1.4]">
                   {item.title}
                 </h3>
                 <p className="line-clamp-2 text-[12px] leading-[1.45] text-text-secondary xl:text-[13px] xl:leading-[1.5]">

@@ -18,6 +18,8 @@ import { News } from './src/collections/News'
 import { Products } from './src/collections/Products'
 import { Partners } from './src/collections/Partners'
 import { Services } from './src/collections/Services'
+import { PageGroups } from './src/collections/PageGroups'
+import { ProductCategories } from './src/collections/ProductCategories'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -42,7 +44,7 @@ export default buildConfig({
       titleSuffix: '- Bắc Âu Admin',
     },
   },
-  collections: [Users, Media, Pages, Projects, News, Products, Partners, Services],
+  collections: [Users, Media, Pages, PageGroups, Projects, News, ProductCategories, Products, Partners, Services],
   globals: [HomePage, SiteSettings],
   plugins: [
     cloudStoragePlugin({
